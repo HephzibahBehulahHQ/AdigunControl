@@ -41,7 +41,6 @@
   "routes": [],
   "secrets": {
     "required": [
-      "OPENAI_API_KEY",
       "ADIGUN_ADMIN_EMAIL",
       "ADIGUN_ACCESS_TEAM_DOMAIN",
       "ADIGUN_ACCESS_AUD",

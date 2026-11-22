@@ -1,3 +1,4 @@
+import {Buffer} from 'node:buffer';
 // ADIGUN deployment verification marker — 2026-09-26
 // Free Cloudflare Workers AI fallback is enabled when the primary provider is unavailable.
 import { DurableObject } from "cloudflare:workers";
@@ -1222,24 +1223,21 @@ async function withTimeout(promise, ms, fallback) {
 }
 
 async function transcribeAudio(request, env) {
-  if (!env.OPENAI_API_KEY) return json(request,{ok:false,error:"Voice transcription is not configured."},503);
+  if (!env.AI?.run) return json(request,{ok:false,error:"Voice transcription is not configured."},503);
   let form;
   try { form = await request.formData(); } catch { return json(request,{ok:false,error:"Invalid audio upload."},400); }
   const audio = form.get("audio");
-  if (!(audio instanceof File || audio instanceof Blob)) return json(request,{ok:false,error:"No audio file was supplied."},400);
+  if (!(audio instanceof File) || !audio.size) return json(request,{ok:false,error:"No audio file was supplied."},400);
   if (audio.size > 25*1024*1024) return json(request,{ok:false,error:"Audio file is larger than 25 MB."},413);
-  const type = String(audio.type || "audio/webm").toLowerCase();
-  if (!type.startsWith("audio/")) return json(request,{ok:false,error:"Only audio uploads are accepted."},415);
-  const upstream = new FormData();
-  upstream.append("file",audio,audio instanceof File ? audio.name : "adigun-audio.webm");
-  upstream.append("model",env.OPENAI_TRANSCRIBE_MODEL || "gpt-4o-mini-transcribe");
-  upstream.append("response_format","json");
+  if (!audio.type.toLowerCase().startsWith("audio/")) return json(request,{ok:false,error:"Only audio uploads are accepted."},415);
+  const model = "@cf/openai/whisper-large-v3-turbo";
   try {
-    const r=await fetch("https://api.openai.com/v1/audio/transcriptions",{method:"POST",headers:{"authorization":"Bearer "+env.OPENAI_API_KEY},body:upstream});
-    const d=await r.json().catch(()=>({}));
-    if(!r.ok || !d.text) return json(request,{ok:false,error:String(d?.error?.message||"Transcription provider failed.")},r.status>=400&&r.status<500?r.status:502);
-    return json(request,{ok:true,text:String(d.text),model:d.model||env.OPENAI_TRANSCRIBE_MODEL||"gpt-4o-mini-transcribe"});
-  } catch(error) { return json(request,{ok:false,error:"Voice transcription request failed: "+String(error?.message||error)},502); }
+    const result = await env.AI.run(model,{audio:Buffer.from(await audio.arrayBuffer()).toString("base64")});
+    if (typeof result?.text !== "string") return json(request,{ok:false,error:"Transcription is temporarily unavailable."},503);
+    return json(request,{ok:true,text:result.text.trim(),model});
+  } catch {
+    return json(request,{ok:false,error:"Transcription is temporarily unavailable."},503);
+  }
 }
 
 async function openAIChat(request, env) {
@@ -1276,6 +1274,12 @@ async function openAIChat(request, env) {
     evidence +
     (clientContext ? "\n\nCLIENT-SUPPLIED SITE CONTEXT:\n" + clientContext : "");
 
+  if (!env.OPENAI_API_KEY) {
+    if (liveEvidence) return json(request,{ok:true,answer:evidenceOnlyHealthAnswer(liveEvidence),provider:"evidence-only",siteUsed:true,webUsed:false,evidence:[liveEvidence]});
+    if (isCurrentInfoIntent(q)) return json(request,{ok:false,error:"Live web verification is unavailable in this AI mode."},503);
+    const answer = await cloudflareFallback(request,env,messages,context+evidence+(clientContext ? "\n\n"+clientContext : ""));
+    return answer || json(request,{ok:false,error:"Cloudflare AI is temporarily unavailable. Please try again later."},503);
+  }
   const payload = {
     model: MODEL(env),
     instructions,
@@ -1827,7 +1831,7 @@ export default {
       return transcribeAudio(request, env);
     }
 
-    if (url.pathname === "/api/chat" && request.method === "POST" && env.OPENAI_API_KEY) {
+    if (url.pathname === "/api/chat" && request.method === "POST" && (env.AI?.run || env.OPENAI_API_KEY)) {
       return openAIChat(request, env);
     }
 
