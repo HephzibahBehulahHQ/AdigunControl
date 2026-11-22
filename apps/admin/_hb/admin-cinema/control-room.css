@@ -20,9 +20,6 @@
 .hb-control-workspace .hb-admin-cinema .showroom { width: min(100%, 56rem); }
 .hb-control-workspace .hb-admin-cinema .showroom video { max-height: min(50vh, 480px); }
 .hb-control-workspace .hb-admin-cinema .showroom:is(:fullscreen,:popover-open) video { max-height: none; }
-@media (max-width: 960px) {
-  .hb-control-quick a { padding: 6px 8px; }
-}
 @media (max-width: 640px) {
   .hb-control-top .hb-admin-header-mark img { width: 38px; height: 27px; }
 }

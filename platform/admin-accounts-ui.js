@@ -9,36 +9,11 @@ async function api(path='',options={}){
 export function openAccounts(){
  const existing=document.querySelector('#hb-admin-accounts');if(existing){existing.focus();return;}
  const dialog=make('dialog');dialog.id='hb-admin-accounts';dialog.setAttribute('translate','no');dialog.className='hb-platform-dialog hb-monitor';dialog.setAttribute('aria-label','Users and sign-ins');
- const style=make('style');style.textContent=`
- .hb-monitor{width:min(1380px,calc(100vw - 24px));max-height:94dvh;padding:clamp(14px,2vw,28px)}
- .hb-monitor .monitor-workspace{display:grid;grid-template-columns:minmax(170px,220px) minmax(0,1fr);gap:18px;align-items:start}
- .hb-monitor .monitor-tabs{display:grid;align-content:start;position:sticky;top:0}
- .hb-monitor .monitor-tabs button{text-align:left;min-height:42px}
- .hb-monitor .monitor-main{min-width:0}
- .hb-monitor .monitor-controls{position:sticky;top:0;z-index:2;padding:10px;background:#0b1421;border:1px solid #22d3ee33;border-radius:12px}
- .hb-monitor .monitor-note{margin:12px 0}
- .hb-monitor .monitor-detail{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px;padding:16px;border:1px solid #22d3ee44;border-radius:12px;background:#0b1421}
- .hb-monitor .monitor-detail h3,.hb-monitor .monitor-detail p,.hb-monitor .monitor-detail ul{grid-column:1/-1;margin:0}
- .hb-monitor .monitor-detail dl{display:grid;grid-template-columns:minmax(100px,.45fr) minmax(0,1fr);gap:7px 12px;margin:0}
- .hb-monitor .monitor-detail dt{color:#a5b4c5}.hb-monitor .monitor-detail dd{margin:0;overflow-wrap:anywhere}
- .hb-monitor .monitor-mask{font:11px 'JetBrains Mono',monospace}
- .hb-monitor .monitor-table-wrap{max-height:52dvh}
- .hb-monitor :focus-visible{outline:2px solid #67e8f9;outline-offset:2px}
- @media(max-width:760px){.hb-monitor .monitor-workspace{grid-template-columns:1fr}.hb-monitor .monitor-tabs{display:flex;position:static;overflow-x:auto;flex-wrap:nowrap}.hb-monitor .monitor-tabs button{flex:0 0 auto}.hb-monitor .monitor-controls{position:static}.hb-monitor .monitor-detail{grid-template-columns:1fr}.hb-monitor .monitor-detail dl{grid-template-columns:1fr}.hb-monitor .monitor-table-wrap{max-height:50dvh}}
- .hb-monitor header,.hb-monitor .monitor-controls,.hb-monitor .monitor-tabs,.hb-monitor .monitor-stats{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:12px 0}
- .hb-monitor header{justify-content:space-between}.hb-monitor h2{margin:0}.hb-monitor .monitor-kicker{color:#67e8f9;font:12px 'JetBrains Mono',monospace;letter-spacing:.12em}
- .hb-monitor .monitor-stats>div{flex:1;min-width:130px;border:1px solid #22d3ee55;border-radius:12px;padding:16px;background:linear-gradient(120deg,#22d3ee11,#a855f711)}
- .hb-monitor .monitor-stats b{display:block;font-size:26px}.hb-monitor .monitor-tabs button[aria-pressed=true]{border-color:#c084fc;box-shadow:inset 0 -3px #c084fc}
- .hb-monitor .monitor-controls label{flex:1;min-width:145px}.hb-monitor .monitor-auto{display:flex;align-items:center;gap:8px}.hb-monitor .monitor-auto input{width:20px;min-height:20px}
- .hb-monitor .monitor-table-wrap{overflow:auto;border:1px solid #22d3ee44;border-radius:10px;max-height:44dvh}.hb-monitor table{display:table!important;width:100%!important;border-collapse:collapse;font-size:13px}.hb-monitor th,.hb-monitor td{padding:12px;text-align:left;border-bottom:1px solid #22d3ee33;overflow-wrap:anywhere;min-width:95px}.hb-monitor th{position:sticky;top:0;background:#13223a;color:#c4b5fd}.hb-monitor td button{font-size:12px}.hb-monitor small{display:block;overflow-wrap:anywhere}.hb-monitor pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}.hb-monitor .monitor-note{border-left:3px solid #22d3ee;padding:10px 14px;line-height:1.6}.hb-monitor .monitor-inspect{margin-top:14px}.hb-monitor button:disabled{opacity:.5;cursor:wait}
- html[data-hb-theme=light] .hb-monitor{background:#f7fafc;color:#142336}html[data-hb-theme=light] .hb-monitor th{background:#e7edf7;color:#45247b}html[data-hb-theme=light] .hb-monitor [role=status],html[data-hb-theme=light] .hb-monitor .monitor-kicker{color:#155e75}
- @media(max-width:600px){.hb-monitor .monitor-tabs button{flex:1 1 42%}.hb-monitor .monitor-stats{gap:8px}.hb-monitor .monitor-stats>div{min-width:100px;padding:12px}.hb-monitor .monitor-controls>*{width:100%}}
- `;
- const head=make('header'),brand=make('div');brand.append(make('small','HEPHZIBAH BEHULAH // ADIGUN SECURITY'),make('h2','Users & sign-ins'));brand.firstChild.className='monitor-kicker';head.append(brand,button('Close',()=>dialog.close()));
+ const head=make('header'),brand=make('div');brand.append(make('h2','Users & sign-ins'));head.append(brand,button('Close',()=>dialog.close()));
  const status=make('p','Connecting to private account records…');status.setAttribute('role','status');status.setAttribute('aria-live','polite');
  const stats=make('div');stats.className='monitor-stats';const tabs=make('nav');tabs.className='monitor-tabs';tabs.setAttribute('aria-label','Monitor views');
  const controls=make('div');controls.className='monitor-controls';const searchLabel=make('label','Search loaded records'),search=make('input');search.type='search';search.placeholder='Email, account, event or IP';searchLabel.append(search);
- const privacyLabel=make('label','Hide email and IP details'),privacy=make('input');privacy.type='checkbox';privacy.checked=true;privacyLabel.append(privacy);privacyLabel.className='monitor-mask';
+ const privacyLabel=make('label','Hide email and IP details'),privacy=make('input');privacy.type='checkbox';privacy.checked=true;privacyLabel.prepend(privacy);privacyLabel.className='monitor-mask';
  const selectLabel=make('label','Time window'),windowSelect=make('select');for(const [v,t]of [['all','All loaded records'],['24','Last 24 hours'],['168','Last 7 days']]){const o=make('option',t);o.value=v;windowSelect.append(o);}selectLabel.append(windowSelect);
  const typeLabel=make('label','Event / account state'),type=make('select');typeLabel.append(type);
  let current='events',page=1,users=[],events=[],operations=[],busy=false,loading=false,lastUpdated=null,timer=null,sortField='created_at',sortDirection=-1;
@@ -48,8 +23,10 @@ export function openAccounts(){
  const refresh=button('Refresh now',()=>load(page));const exportButton=button('Export filtered JSON',()=>{const blob=new Blob([JSON.stringify({exported_at:new Date().toISOString(),source:current,scope:'Loaded records only; not a complete incident archive',filters:{search:search.value,hours:windowSelect.value,state:type.value},records:filtered().map(exportRecord)},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=make('a');a.href=url;a.download='adigun-'+current+'-'+Date.now()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
  const autoLabel=make('label','Auto-refresh every 30 seconds'),auto=make('input');auto.type='checkbox';autoLabel.className='monitor-auto';autoLabel.prepend(auto);
  auto.onchange=()=>{clearInterval(timer);if(auto.checked)timer=setInterval(()=>{if(!document.hidden&&!loading&&!busy&&current!=='access')load(page);},30000);};
- const workspace=make('section'),main=make('div');workspace.className='monitor-workspace';main.className='monitor-main';workspace.append(tabs,main);main.append(controls,note,previous,next,content,inspect);
- controls.append(searchLabel,selectLabel,typeLabel,privacyLabel,refresh,exportButton,autoLabel);dialog.append(style,head,status,stats,workspace);
+ const workspace=make('section'),main=make('div');workspace.className='monitor-workspace';main.className='monitor-main';workspace.append(main);main.append(controls,note,previous,next,content,inspect);
+ const options=make('div'),actions=make('div');options.className='monitor-options';actions.className='monitor-actions';
+ actions.append(refresh,exportButton);options.append(privacyLabel,autoLabel,actions);
+ controls.append(searchLabel,selectLabel,typeLabel,options);dialog.append(head,status,stats,tabs,workspace);
  for(const [key,title]of tabsList){const b=button(title,()=>{current=key;setTypes();render();});b.dataset.view=key;tabs.append(b);}
  function source(){return current==='users'?users:current==='operations'?operations:events;}
  function state(u){return u.banned_until&&Date.parse(u.banned_until)>Date.now()?'Paused':u.email_confirmed_at?'Confirmed':'Email pending';}
