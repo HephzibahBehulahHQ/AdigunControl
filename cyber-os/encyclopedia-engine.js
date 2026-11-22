@@ -18,7 +18,7 @@ function allCatalogs(){
  add("Network tool",H.networkTools);add("Cybersecurity tool",H.cybersecurityTools);add("Protocol",H.protocols);add("Windows command",H.windowsCommands);
  add("PowerShell",H.powershell);add("Linux command",H.linuxCommands);add("Shortcut",H.shortcuts);
  add("Power trick",H.powerTricks);add("Detection",H.suspicious);add("Hacker / actor",H.hackerTypes);
- add("Security team",H.teams);add("Platform",H.platforms);add("Engineering",H.electronics);add("Formula",H.formulas);
+ add("Security team",H.teams);add("Platform",H.platforms);
  add("Documentation",H.docs);add("Model",H.models);
  return out;
 }

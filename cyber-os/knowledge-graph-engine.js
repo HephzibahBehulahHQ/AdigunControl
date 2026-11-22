@@ -13,9 +13,7 @@ const records=()=>[
  ...(H.hackerTypes||[]).map(x=>({type:"actor",name:Array.isArray(x)?x[0]:x.name,data:x})),
  ...(H.teams||[]).map(x=>({type:"security team",name:Array.isArray(x)?x[0]:x.name,data:x})),
  ...(H.platforms||[]).map(x=>({type:"platform",name:Array.isArray(x)?x[0]:x.name,data:x})),
- ...(H.electronics||[]).map(x=>({type:"electronics",name:Array.isArray(x)?x[0]:x.name,data:x})),
  ...(H.docs||[]).map(x=>({type:"documentation",name:Array.isArray(x)?x[0]:x.name,data:x})),
- ...(H.formulas||[]).map(x=>({type:"formula",name:Array.isArray(x)?x[1]:x.name,data:x})),
  ...(H.powershell||[]).map(x=>({type:"PowerShell",name:x.name||x.command,data:x})),
  ...(H.externalRecords||[]).map(x=>({type:x.category||"external",name:x.name||x.title,data:x})),
  ...(H.knowledgeRecords||[]).map(x=>({type:"structured knowledge",name:x.name,data:x}))

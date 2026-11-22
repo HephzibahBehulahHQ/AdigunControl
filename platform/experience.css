@@ -107,3 +107,47 @@ html[data-hb-theme=light] .hb-platform-footer{background:#f8fafc!important;color
 html[data-hb-theme=light] .hb-platform-footer-identity strong{color:#172334!important}
 html[data-hb-theme=light] .hb-platform-footer-identity small{color:#53647b!important}
 @media(max-width:700px){.hb-product-lockup .hb-company-logo{width:112px;height:40px}.hb-product-lockup .hb-product-wordmark{font-size:12px}.hb-platform-brand>img{width:110px!important;height:40px!important}.hb-platform-product-wordmark{font-size:12px}.hb-platform-footer-identity{grid-template-columns:auto 1fr}.hb-platform-footer-identity img{width:104px;height:38px}}
+/* Shared private workspace layout. Keep viewport navigation separate from content. */
+html:has(body.hb-admin-workspace),body.hb-admin-workspace{height:100%;overflow:hidden!important}
+.hb-admin-workspace .os-shell{height:100dvh;min-height:0;overflow:hidden!important}
+.hb-admin-workspace .os-sidebar{position:relative;top:auto;height:100%;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.hb-admin-workspace .os-main{min-height:0;height:100%;min-width:0;overflow:auto;overscroll-behavior:contain;scroll-padding-top:8rem}
+.hb-unified .hb-admin-workspace .os-top,.hb-admin-workspace .os-top{position:sticky!important;inset:0 auto auto!important;z-index:30;gap:.65rem;min-height:3.75rem;background:var(--hb-surface,var(--panel,#111c2d))}
+.hb-admin-workspace .hb-admin-view-hidden{display:none!important}
+.hb-admin-brand,.hb-workspace-switcher a{display:flex;align-items:center;gap:.5rem;text-decoration:none;font-weight:650}
+.hb-admin-brand{white-space:nowrap}
+.hb-admin-brand img{width:2rem;height:2rem;object-fit:contain}
+.hb-workspace-switcher{display:flex;flex-wrap:wrap;gap:.25rem;padding:.65rem .5rem;border-bottom:1px solid #64748b66}
+.hb-workspace-switcher a{padding:.4rem .5rem;border-radius:.4rem;font-size:.8rem}
+.hb-workspace-switcher [aria-current],.hb-admin-workspace .os-sidebar [aria-current="location"]{background:#38bdf824;outline:1px solid #38bdf877}
+.hb-admin-workspace .hb-member-actions{position:relative;margin:0;flex:0 0 auto}
+.hb-admin-account-panel{position:absolute;inset:calc(100% + .35rem) 0 auto auto;z-index:1;display:grid;gap:.5rem;width:max-content;max-width:min(19rem,85vw);padding:.8rem;border:1px solid #64748b80;border-radius:.6rem;background:var(--hb-surface,var(--panel,#111c2d));box-shadow:0 .6rem 1.5rem #0004}
+.hb-admin-account-panel small{overflow-wrap:anywhere;grid-row:1}
+.hb-admin-workspace .tool-record-grid{grid-template-columns:minmax(0,1fr)}
+.hb-admin-workspace .cybersecurity-tool-card{padding:.7rem 1rem}
+@media(min-width:769px) and (max-width:900px){
+  body.hb-admin-workspace .os-shell{grid-template-columns:200px minmax(0,1fr)}
+}
+@media(max-width:768px){
+  .hb-unified .hb-admin-workspace .os-top{padding-inline:5.5rem .6rem!important}
+  .hb-admin-workspace .os-sidebar{position:fixed;height:100dvh}
+  .hb-admin-workspace .os-main{scroll-padding-top:11rem}
+}
+
+.hb-admin-management>button{display:block;width:100%;padding:.55rem;text-align:left}
+.hb-admin-account-panel a{color:inherit}
+.hb-admin-workspace .academy-show-more{gap:.6rem;align-items:center}
+.hb-admin-workspace .formula-layout{padding:1rem;display:grid;gap:1rem}
+.hb-admin-workspace .formula-layout :is(select,input){max-width:100%}
+.hb-admin-workspace #engineeringConcepts details{padding:.7rem 1rem;border-bottom:1px solid var(--hb-border)}
+
+.hb-admin-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding:.8rem 1.25rem;border-top:1px solid var(--hb-border);background:var(--hb-surface);color:var(--hb-text);font-size:.8rem}
+.hb-admin-footer button,.hb-admin-management>button{color:inherit;background:var(--hb-surface-alt);border:1px solid var(--hb-border);border-radius:.4rem;padding:.45rem .65rem}
+.hb-admin-management>button{margin:.25rem 0}
+.hb-workspace-overview{display:block;padding:.6rem}
+.hb-admin-workspace .mega-domain-group,.hb-admin-workspace .mega-catalog-hint,.hb-admin-workspace .mega-show-more{grid-column:1/-1}
+.hb-admin-workspace .mega-domain-group{padding:.75rem 0}
+.hb-admin-workspace .mega-show-more{display:flex;gap:.75rem;align-items:center}
+.hb-admin-workspace .mega-tool-card{background:var(--hb-surface-alt);color:var(--hb-text);border-color:var(--hb-border)}
+.hb-admin-workspace .resource-tool-card{background:var(--hb-surface);color:var(--hb-text)}
+.hb-admin-workspace .os-top:focus-within{z-index:31}

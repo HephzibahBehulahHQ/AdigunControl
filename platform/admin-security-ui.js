@@ -16,8 +16,8 @@ function lock(){
 }
 export function watchSession(menu){
  if(sessionWatcher)return;sessionWatcher=true;
- const identity=make('small','Verifying administrator session…');identity.setAttribute('role','status');menu.append(identity);
- async function refresh(){if(document.hidden)return;try{const data=await get('/session'),s=data.session;expiry=s.expiresAt?Date.parse(s.expiresAt):0;identity.textContent=s.email+' · '+s.role+' · '+(expiry?'expires '+new Date(expiry).toLocaleString():'expiry unavailable');}catch(e){identity.textContent=e.message;if(e.expired||expiry&&Date.now()>=expiry)lock();}}
+ const identity=make('small','Verifying administrator session…');identity.setAttribute('role','status');(menu.querySelector('.hb-admin-account-panel')||menu).append(identity);
+ async function refresh(){if(document.hidden)return;try{const data=await get('/session'),s=data.session;expiry=s.expiresAt?Date.parse(s.expiresAt):0;identity.textContent=s.email+' · '+s.role+(expiry && expiry-Date.now()<900000 ? ' · expires '+new Date(expiry).toLocaleTimeString() : '');}catch(e){identity.textContent=e.message;if(e.expired||expiry&&Date.now()>=expiry)lock();}}
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
  setInterval(()=>{if(expiry&&Date.now()>=expiry)lock();else refresh();},60000);refresh();
 }

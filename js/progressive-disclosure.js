@@ -78,7 +78,7 @@ function boot(){
  function syncHash(){
   const hash=location.hash;
   if(!hash)return;
-  const link=links.find(a=>a.hash===h&&a.pathname===location.pathnameash);
+  const link=links.find(a=>a.hash===hash&&a.pathname===location.pathname);
   if(link)activate(link);
  }
  window.addEventListener("hashchange",syncHash);
