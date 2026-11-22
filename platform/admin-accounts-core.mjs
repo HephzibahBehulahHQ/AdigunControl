@@ -4,10 +4,11 @@ const PROTECTED=new Set([OWNER,'adminhephzibahbehulah@gmail.com']);
 const ACCESS={ADIGUN_ACCESS_TEAM_DOMAIN:'https://wispy-salad-ae7d.cloudflareaccess.com',ADIGUN_ACCESS_AUD:'726c315523aa5e026b1187fac0c0ddf15605f2e838bfd1ea120333b4fb9c6ffd',ADIGUN_ADMIN_EMAIL:OWNER};
 const json=(data,status=200)=>Response.json(data,{status,headers:{'cache-control':'private, no-store','x-content-type-options':'nosniff'}});
 const account=u=>({id:u.id,email:u.email||'',created_at:u.created_at,last_sign_in_at:u.last_sign_in_at,email_confirmed_at:u.email_confirmed_at,banned_until:u.banned_until,owner:PROTECTED.has(String(u.email||'').toLowerCase())});
-export function createAccountService({readEnv,verify=verifyCloudflareAccessJwt,fetcher=fetch}){
+export function createAccountService({readEnv,verify=verifyCloudflareAccessJwt,fetcher=fetch,accessAudience=ACCESS.ADIGUN_ACCESS_AUD,readOnly=false}){
  return async function(request){
   if(!['GET','POST'].includes(request.method))return json({error:'Method not allowed'},405);
-  const identity=await verify(request,ACCESS);if(!identity.ok)return json({error:'Owner authentication required'},401);
+  const identity=await verify(request,{...ACCESS,ADIGUN_ACCESS_AUD:accessAudience});if(!identity.ok)return json({error:'Owner authentication required'},401);
+  if(readOnly&&request.method!=='GET')return json({error:'Account changes are disabled in preview'},405);
   const url=new URL(request.url),resource=url.searchParams.get('resource')||'users';
   const project=readEnv('SUPABASE_URL');let secret;
   try{secret=JSON.parse(readEnv('SUPABASE_SECRET_KEYS')||'{}').default||readEnv('SUPABASE_SERVICE_ROLE_KEY');}catch{return json({error:'Account administration is not configured'},503);}

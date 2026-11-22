@@ -22,3 +22,21 @@ test('account mutations require exact account confirmation and an auditable reas
 
 test('private account console masks sensitive details by default and stays keyboard operable',()=>{const ui=fs.readFileSync(new URL('./admin-accounts-ui.js',import.meta.url),'utf8');assert.match(ui,/privacy\.checked=true/);assert.match(ui,/Hide email and IP details/);assert.match(ui,/masked\(row\.email\|\|row\.id,'email'\)/);assert.match(ui,/ArrowDown/);assert.match(ui,/not available in this account feed/);assert.doesNotMatch(ui,/\.innerHTML\s*=/);});
 
+
+test('preview account requests use the preview audience and cannot mutate accounts', async () => {
+ const accessAudience = 'f'.repeat(64);
+ const service = createAccountService({
+  accessAudience,
+  readOnly:true,
+  readEnv:()=>{throw Error('No account provider access permitted');},
+  verify:async (_request,access)=>{assert.equal(access.ADIGUN_ACCESS_AUD,accessAudience);return {ok:true};},
+ });
+ const denied=await service(new Request('https://service.test/',{method:'POST'}));
+ assert.equal(denied.status,405);
+ const url='https://admin-preview.hephzibahbehulah.com/api/admin/accounts';
+ const response=await accountGateway(new Request(url),{},null,async target=>{
+  assert.equal(target.pathname,'/functions/v1/hb-admin-accounts-preview');
+  return Response.json({users:[]});
+ });
+ assert.equal(response.status,200);
+});
