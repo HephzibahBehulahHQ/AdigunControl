@@ -1,6 +1,6 @@
 window.CYBER_ENCYCLOPEDIA={
 version:"2026.10",
-mission:"A source-aware cybersecurity encyclopedia connecting concepts, layers, protocols, ports, commands, tools, frameworks, teams, detection, labs and engineering.",
+mission:"A source-aware cybersecurity encyclopedia connecting concepts, layers, protocols, ports, commands, tools, frameworks, teams, detection and labs.",
 flow:["DISCOVER","UNDERSTAND","CONNECT","COPY","PRACTICE","DETECT / DEFEND","GO DEEPER"],
 domains:[
 ["Cybersecurity Fundamentals","CIA triad, authentication, authorization, risk, assets, vulnerabilities, threats, controls, logging and security architecture.","fundamentals"],
@@ -19,7 +19,6 @@ domains:[
 ["Frameworks & Standards","NIST CSF 2.0, MITRE ATT&CK, OWASP, CIS Controls, IETF RFCs, CVE and other security references.","frameworks"],
 ["Malware & Reverse Engineering","Static analysis, dynamic analysis, hashes, indicators, sandboxing, memory and defensive malware research.","malware"],
 ["Identity & Access","Accounts, groups, MFA, IAM, Active Directory, Entra ID, RBAC, least privilege and identity telemetry.","identity"],
-["Engineering & Electronics","Electrical formulas, electronics, signals, PLCs, industrial systems, measurement and engineering calculations.","engineering"],
 ["Cyber Labs & Practice","Packet Tracer, PortSwigger labs, CTFs, isolated VMs, PCAP analysis and controlled security exercises.","labs"]
 ],
 concepts:[

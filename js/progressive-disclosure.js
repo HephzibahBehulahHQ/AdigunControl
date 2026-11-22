@@ -66,7 +66,7 @@ function boot(){
  const open=()=>{document.body.classList.add("hb-mobile-nav-open");toggle.setAttribute("aria-expanded","true");toggle.setAttribute("aria-label","Close navigation menu");};
  toggle.addEventListener("click",()=>document.body.classList.contains("hb-mobile-nav-open")?close():open());
  backdrop.addEventListener("click",close);
- document.addEventListener("keydown",e=>{if(e.key==="Escape")close();});
+ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&document.body.classList.contains("hb-mobile-nav-open")){close();toggle.focus();}});
  const links=[...sidebar.querySelectorAll(".os-nav a")];
  function activate(link){
   if(!link)return;
@@ -78,7 +78,7 @@ function boot(){
  function syncHash(){
   const hash=location.hash;
   if(!hash)return;
-  const link=links.find(a=>a.hash===h&&a.pathname===location.pathnameash);
+  const link=links.find(a=>a.hash===hash&&a.pathname===location.pathname);
   if(link)activate(link);
  }
  window.addEventListener("hashchange",syncHash);

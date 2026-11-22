@@ -33,7 +33,7 @@ const side=document.querySelector('.os-sidebar');
   const title=sectionNames.get(clean(replacement));if(title&&text!==title){node.textContent=title;node.setAttribute('translate','no');}else if(replacement!==text)node.textContent=replacement;
  }
  // Utility controls stay in normal document flow, never above workspace buttons.
- const topHeader=document.querySelector('.os-top'),mobileMenu=document.querySelector('#hbMobileNavToggle');if(topHeader&&mobileMenu&&mobileMenu.parentElement!==topHeader)topHeader.prepend(mobileMenu);
+ const topHeader=document.querySelector('.os-top'),mobileMenu=document.querySelector('#hbMobileNavToggle');if(!privatePage&&topHeader&&mobileMenu&&mobileMenu.parentElement!==topHeader)topHeader.prepend(mobileMenu);
  let target=document.querySelector('.os-top-actions')||document.querySelector('.hb-platform-bar')||document.querySelector('.hb-account-page');
  if(!target&&document.querySelector('.os-top')){target=el('div','os-top-actions');const header=document.querySelector('.os-top'),search=header.querySelector('.cyber-top-search');header.append(target);if(search)target.prepend(search);}
  if(target){let utility=target.querySelector('.hb-utilities');if(!utility){utility=el('div','hb-utilities');utility.setAttribute('aria-label','Display preferences');utility.setAttribute('translate','no');if(target.classList.contains('hb-account-page'))target.querySelector('.hb-account-card')?.before(utility);else target.append(utility);}
@@ -62,6 +62,7 @@ function loadScript(src){if([...document.scripts].some(s=>new URL(s.src,location
 function init(){const sheet=document.querySelector('link[href="/_hb/experience.css"]');if(sheet)document.head.append(sheet);document.body.classList.add('hb-unified');applyTheme();reconcile();
  const observer=new MutationObserver(records=>{if(queued||!records.some(r=>r.addedNodes.length))return;queued=true;requestAnimationFrame(reconcile);});observer.observe(document.body,{childList:true,subtree:true});
  if(privatePage&&location.hash==='#users-signins')document.querySelector('[data-hb-monitor]')?.click();
+ if(privatePage&&location.hash==='#security-releases')document.querySelector('[data-hb-security]')?.click();
  if(!window.HBLanguage)loadScript('/_hb/language-system.js?v=20261024-1');
  if(!document.querySelector('#hbBotLauncher')){const css=el('link');css.rel='stylesheet';css.href='/css/hb-bot-chat.css';document.head.append(css);loadScript('/js/hb-bot-chat.js');}
 }

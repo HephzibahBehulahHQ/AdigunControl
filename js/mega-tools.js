@@ -6,6 +6,7 @@
 'use strict';
 
 const $ = id => document.getElementById(id);
+const technologyDomains = new Set(["Data & Analytics","Linux & Programming","Networking & IP","General"]);
 const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 const DEFINITIONS = {
@@ -460,6 +461,8 @@ window.HBMegaToolOpen=function(id){const t=window.__HBMegaTools?.find(x=>String(
 window.HBMegaToolClose=function(){const m=$("resourceToolModal");if(m){m.classList.remove("open");m.setAttribute("aria-hidden","true")}};
 
 window.HBUpgradeMegaTools=function(list){
+ const grid=$("megaToolGrid");if(!grid)return;
+ const scope=grid.closest("[data-catalog-scope]")?.dataset.catalogScope;
  const base=Array.isArray(list)?list:[], local=window.HBEngineeringToolRegistry||[], library=window.HBEngineeringLibraryRegistry||[];
  const coreEngineering=[
   {name:"Power",category:"Core Engineering",type:"FORMULA",formula:"P = V × I",execution:"BROWSER",source:"ADIGUN Core Engineering",engine:"engineering",inputs:[{key:"V",label:"Voltage (V)"},{key:"I",label:"Current (A)"}],calculate:v=>v.V!=null&&v.I!=null?(v.V*v.I).toFixed(4)+" W (V × I)":"Enter voltage and current."},
@@ -491,12 +494,13 @@ window.HBUpgradeMegaTools=function(list){
  ];
  const normalise=(x,i,source)=>source!=="base"?{id:"eng-"+source+"-"+i,name:x.name,category:x.category||"Engineering",type:x.type||"FORMULA",formula:x.formula||"",execution:x.execution||"BROWSER",source:x.source||source,engine:"engineering",inputs:x.inputs||[],calculate:x.calculate}:{...x,id:x.id??("base-"+i),category:x.category||"General",execution:x.execution||"LINK",source:x.source||"Indexed library"};
  const merged=[...base.map((x,i)=>normalise(x,i,"base")),...local.map((x,i)=>normalise(x,i,"local")),...library.map((x,i)=>normalise(x,i,"library")),...coreEngineering.map((x,i)=>({...x,id:"core-"+i})),...workbench.map((x,i)=>({...x,id:"workbench-"+i}))];
- const seen=new Set(),tools=merged.filter(x=>{const k=(x.name+"|"+x.category).toLowerCase();if(seen.has(k))return false;seen.add(k);return true});
+ const seen=new Set(),tools=merged.filter(x=>{
+  if(scope && (scope==="cyber")!==(x.category==="Cybersecurity"))return false;const k=(x.name+"|"+x.category).toLowerCase();if(seen.has(k))return false;seen.add(k);return true});
  window.__HBMegaTools=tools;
  window.dispatchEvent(new CustomEvent("hb:mega-tools-ready",{detail:{count:tools.length}}));
- const grid=$("megaToolGrid");if(!grid)return;
  const search=$("megaToolSearch"),category=$("megaToolCategory"),typeSel=$("megaToolType"),execSel=$("megaToolExecution");
- let showAllMega=false;
+ let page=0;
+ const pageSize=24;
  const searchable=x=>{try{return JSON.stringify(x,(k,v)=>typeof v==="function"?undefined:v).toLowerCase()}catch{return [x.name,x.category,x.type,x.formula,x.source].join(" ").toLowerCase()}};
  const normaliseSearch=v=>String(v||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
  const draw=()=>{
@@ -504,31 +508,37 @@ window.HBUpgradeMegaTools=function(list){
   const hasFilters=!!q||f!=="all"||tf!=="all"||ex!=="all";
   if(!hasFilters){
    const counts=new Map();tools.forEach(x=>{const c=x.category||"General";counts.set(c,(counts.get(c)||0)+1)});
-   grid.innerHTML='<div class="mega-category-overview" aria-label="Tool categories">'+[...counts.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([cat,n])=>'<button type="button" class="mega-category-tile" data-open-mega-category="'+esc(cat)+'"><span>'+n+' CAPABILITIES</span><strong>'+esc(cat)+'</strong><small>Browse this domain →</small></button>').join("")+'</div><p class="mega-catalog-hint">Choose a domain or search by tool name, alias, category, formula, description, keyword or source. All catalogue records remain searchable even when not shown.</p>';
-   if($("megaToolCount"))$("megaToolCount").textContent=tools.length.toLocaleString()+" capabilities across "+counts.size.toLocaleString()+" domains";
+   const categoryRows=[...counts.entries()].sort((a,b)=>a[0].localeCompare(b[0]));
+   const groups=scope==="tool-lab" ? [["Engineering",categoryRows.filter(([name])=>!technologyDomains.has(name))],["Computing and data",categoryRows.filter(([name])=>technologyDomains.has(name))]] : [["Security calculators",categoryRows]];
+   grid.innerHTML=groups.filter(([,entries])=>entries.length).map(([label,entries])=>'<div class="mega-domain-group"><h3>'+esc(label)+'</h3><div class="mega-category-overview" aria-label="'+esc(label)+' categories">'+entries.map(([cat,n])=>'<button type="button" class="mega-category-tile" data-open-mega-category="'+esc(cat)+'"><span>'+n+' CAPABILITIES</span><strong>'+esc(cat)+'</strong><small>Browse this domain →</small></button>').join("")+'</div></div>').join("")+'<p class="mega-catalog-hint">Choose a domain or search by tool name, alias, category, formula, description, keyword or source. All catalogue records remain searchable even when not shown.</p>';
+   if($("megaToolCount"))$("megaToolCount").textContent=tools.length.toLocaleString()+" capabilities across "+counts.size.toLocaleString()+(counts.size===1?" domain":" domains");
    return;
   }
   const qNormal=normaliseSearch(q),qCompact=qNormal.replace(/\s+/g,"");
   const rows=tools.filter(x=>{const hay=searchable(x),normal=normaliseSearch(hay);return (f==="all"||x.category===f)&&(tf==="all"||String(x.type||"").toUpperCase()===tf)&&(ex==="all"||String(x.execution||"").toUpperCase()===ex)&&(!q||hay.includes(q)||normal.includes(qNormal)||normal.replace(/\s+/g,"").includes(qCompact));});
-  const shown=showAllMega?rows:rows.slice(0,36);
+  const pageCount=Math.max(1,Math.ceil(rows.length/pageSize));
+  page=Math.min(page,pageCount-1);
+  const shown=rows.slice(page*pageSize,(page+1)*pageSize);
   grid.innerHTML=shown.map(x=>'<article class="hb-card mega-tool-card"><div class="hb-card-top"><span>'+esc(String(x.id).padStart(4,"0"))+" · "+esc(x.category)+'</span><span>● LIVE</span></div><h3>'+esc(x.name)+'</h3><p>'+esc(x.formula||x.description||"Interactive technical capability.")+'</p><small>'+esc((x.type||"TOOL")+" · "+(x.execution||"LOCAL"))+'</small><br><button class="os-btn mega-open" type="button" data-id="'+esc(x.id)+'">OPEN TOOL →</button></article>').join("")||'<div class="intel-empty">No tools match the current filters. Try a shorter query or clear one of the filters.</div>';
-  if(rows.length>shown.length)grid.insertAdjacentHTML("beforeend",'<div class="mega-show-more"><button type="button" data-show-more-mega>SHOW ALL '+rows.length+' MATCHES</button></div>');
+  if(pageCount>1)grid.insertAdjacentHTML("beforeend",'<nav class="mega-show-more" aria-label="Tool pages"><button type="button" data-mega-page="-1" '+(page===0?'disabled':'')+'>Previous</button><span>Page '+(page+1)+' of '+pageCount+'</span><button type="button" data-mega-page="1" '+(page+1===pageCount?'disabled':'')+'>Next</button></nav>');
   grid.querySelectorAll(".mega-open").forEach(b=>b.onclick=()=>window.HBMegaToolOpen(b.dataset.id));
   if($("megaToolCount"))$("megaToolCount").textContent=rows.length.toLocaleString()+" matching · "+tools.length.toLocaleString()+" total capabilities";
  };
- grid.addEventListener("click",e=>{
+ grid.onclick=e=>{
   const cat=e.target.closest("[data-open-mega-category]");
-  if(cat&&category){category.value=cat.dataset.openMegaCategory;showAllMega=false;draw();grid.scrollIntoView({behavior:"smooth",block:"start"});return;}
-  if(e.target.closest("[data-show-more-mega]")){showAllMega=true;draw();}
- });
-const cats=[...new Set(tools.map(x=>x.category))].sort();if(category)category.innerHTML='<option value="all">ALL DOMAINS</option>'+cats.map(x=>'<option value="'+esc(x)+'">'+esc(x.toUpperCase())+'</option>').join("");if(typeSel){const vals=[...new Set(tools.map(x=>String(x.type||"TOOL").toUpperCase()))].sort();typeSel.innerHTML='<option value="all">ALL TOOL TYPES</option>'+vals.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join("")}if(execSel){const vals=[...new Set(tools.map(x=>String(x.execution||"LOCAL").toUpperCase()))].sort();execSel.innerHTML='<option value="all">ALL EXECUTION</option>'+vals.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join("")}[search,category,typeSel,execSel].forEach(e=>{if(e&&!e.dataset.hbBound){const update=()=>{showAllMega=false;draw()};e.addEventListener("input",update);e.addEventListener("change",update);e.dataset.hbBound="1"}});draw();
+  if(cat&&category){category.value=cat.dataset.openMegaCategory;page=0;draw();grid.scrollIntoView({behavior:"smooth",block:"start"});return;}
+  const step=e.target.closest("[data-mega-page]");
+  if(step){page+=Number(step.dataset.megaPage);draw();grid.querySelector("[data-mega-page]:enabled")?.focus({preventScroll:true});grid.scrollIntoView({block:"start"});}
+ };
+const cats=[...new Set(tools.map(x=>x.category))].sort();if(category)category.innerHTML='<option value="all">ALL DOMAINS</option>'+cats.map(x=>'<option value="'+esc(x)+'">'+esc(x.toUpperCase())+'</option>').join("");if(typeSel){const vals=[...new Set(tools.map(x=>String(x.type||"TOOL").toUpperCase()))].sort();typeSel.innerHTML='<option value="all">ALL TOOL TYPES</option>'+vals.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join("")}if(execSel){const vals=[...new Set(tools.map(x=>String(x.execution||"LOCAL").toUpperCase()))].sort();execSel.innerHTML='<option value="all">ALL EXECUTION</option>'+vals.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join("")}[search,category,typeSel,execSel].forEach(e=>{if(e){const update=()=>{page=0;draw()};e.oninput=update;e.onchange=update;}});draw();
 };
 window.HBMegaToolOpen=function(id){
  const t=window.__HBMegaTools?.find(x=>String(x.id)===String(id));if(!t)return;
- if(t.workbench){const host=document.querySelector("#technicalWorkbench");host?.scrollIntoView({behavior:"smooth",block:"start"});document.querySelectorAll(".hb-machine-tabs button").forEach(b=>{if(b.dataset.machine===t.workbench)b.click()});return}
+ if(t.workbench){const host=document.querySelector("#technicalWorkbench");if(host)location.hash="technicalWorkbench";document.querySelectorAll(".hb-machine-tabs button").forEach(b=>{if(b.dataset.machine===t.workbench)b.click()});return}
  if(t.engine==="engineering"&&typeof t.calculate==="function"){const modal=$("resourceToolModal"),body=$("resourceToolBody");if(!modal||!body)return; $("resourceToolTitle").textContent=t.name;body.innerHTML='<div class="tool-modal-domain">'+esc(t.category)+'</div><h2>'+esc(t.name)+'</h2><div class="tool-formula"><b>FORMULA</b><code>'+esc(t.formula)+'</code></div><div class="tool-inputs">'+t.inputs.map((x,i)=>'<label>'+esc(x.label)+'<input id="megaInput'+i+'" type="'+(x.inputType||"number")+'" step="any" placeholder="'+esc(x.label)+'"></label>').join("")+'</div><div class="hb-mini-actions"><button id="megaCalculate" class="os-btn primary">CALCULATE</button><button id="megaClear" class="os-btn">CLEAR</button></div><div id="megaResult" class="hb-result">Enter variables. Results appear here.</div><div class="tool-source-note">Runs locally in your browser. Source registry: '+esc(t.source)+'. Verify safety-critical work against the applicable standard and manufacturer data.</div>';modal.classList.add("open");modal.setAttribute("aria-hidden","false");const run=()=>{const v={};t.inputs.forEach((x,i)=>{const e=$("megaInput"+i);v[x.key]=e&&e.value!==""?(e.type==="text"?e.value.trim():Number(e.value)):null});try{$("megaResult").textContent=t.calculate(v)}catch(e){$("megaResult").textContent="Check the input values."}};$("megaCalculate").onclick=run;$("megaClear").onclick=()=>{t.inputs.forEach((_,i)=>{const e=$("megaInput"+i);if(e)e.value=""});$("megaResult").textContent="Enter variables. Results appear here."};body.querySelectorAll("input").forEach(e=>e.addEventListener("input",run));return}
  const modal=$("resourceToolModal"),body=$("resourceToolBody");if(!modal||!body)return;const d=definitionFor(t);$("resourceToolTitle").textContent=t.name;body.innerHTML='<div class="tool-modal-domain">'+esc(t.category)+'</div><div class="tool-formula"><b>FORMULA / METHOD</b><code>'+esc(d[0])+'</code></div><div class="tool-inputs">'+d[1].map((x,i)=>'<label>'+esc(x)+'<input id="megaInput'+i+'" type="'+(/text|json|url|regex|cron|user|group|expression|columns|color|hex|ipv4|character|comma|html|markdown|yaml|xml/i.test(x)?"text":"number")+'" step="any" placeholder="'+esc(x)+'"></label>').join("")+'</div><div class="hb-mini-actions"><button id="megaCalculate" class="os-btn primary" type="button">CALCULATE</button><button id="megaClear" class="os-btn" type="button">CLEAR</button></div><div id="megaResult" class="hb-result">Enter variables. Results appear here.</div><div class="tool-source-note">Runs locally in your browser. No input is sent to GitHub or the source repository.</div>';modal.classList.add("open");modal.setAttribute("aria-hidden","false");const run=()=>{const v=d[1].map((_,i)=>{const e=$("megaInput"+i);if(!e)return null;if(e.type==="text")return e.value.trim()||null;const n=parseFloat(e.value);return Number.isFinite(n)?n:null});try{$("megaResult").textContent=d[2](v)}catch(e){$("megaResult").textContent="Check the input values."}};$("megaCalculate").onclick=run;$("megaClear").onclick=()=>{d[1].forEach((_,i)=>{const e=$("megaInput"+i);if(e)e.value=""});$("megaResult").textContent="Enter variables. Results appear here."};body.querySelectorAll("input").forEach(e=>e.addEventListener("input",run));
 };
 
+document.addEventListener("keydown",event=>{if(event.key==="Escape")window.HBMegaToolClose();});
 document.addEventListener("DOMContentLoaded",()=>{$("resourceToolClose")?.addEventListener("click",window.HBMegaToolClose);$("resourceToolModal")?.addEventListener("click",e=>{if(e.target.id==="resourceToolModal")window.HBMegaToolClose()})});
 })();

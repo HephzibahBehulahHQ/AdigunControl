@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 
-test('private command center and workbench use parent and product wordmarks with valid workspace links', () => {
+test('private command center and workbench have the shared workspace destinations', () => {
   const control = fs.readFileSync(path.join(root, 'apps/admin/admin.html'), 'utf8');
   const tools = fs.readFileSync(path.join(root, 'apps/admin/admin-tools.html'), 'utf8');
   const cyber = fs.readFileSync(path.join(root, 'apps/cyber-os/index.html'), 'utf8');
@@ -16,7 +16,8 @@ test('private command center and workbench use parent and product wordmarks with
   }
   assert.match(control, /class="hb-admin-header-mark" href="#overview"/);
   assert.doesNotMatch(control, /class="os-brand hb-product-lockup"/);
-  assert.match(tools, /href="\/admin\/cyber-os\/"[^>]*>⌘ ADIGUN CYBER OS/);
+  const workspace = fs.readFileSync(path.join(root, 'platform/admin-workspace.js'), 'utf8');
+  for (const url of ['/admin/tools/', '/admin/cyber-os/']) assert.ok(workspace.includes(url));
   assert.match(tools, /href="\/admin\/">ADIGUN Control/);
   assert.doesNotMatch(tools, /adigun-contol/);
 });

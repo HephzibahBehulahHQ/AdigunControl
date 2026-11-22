@@ -150,20 +150,23 @@
 
   function renderDocs() {
     const grid=$('docGrid'), cat=$('docCategory'), search=$('docSearch'); if(!grid)return;
+    const securityDomains=new Set(["Cybersecurity","Web Security","AI Security","OSINT / Research","Networking"]);
+    const inCyber=Boolean(grid.closest("#security-references"));
     const knowledge=[
       ...resources.map(r=>({domain:r[0],title:r[1],description:r[2],href:r[3],kind:'RESOURCE'})),
       ...docs.map(d=>({domain:d[0],title:d[1],description:'Open documentation or reference material.',href:d[2],kind:'DOCUMENTATION'}))
     ];
-    const cats=[...new Set(knowledge.map(d=>d.domain))].sort();
+    const available=knowledge.filter(d=>inCyber===securityDomains.has(d.domain));
+    const cats=[...new Set(available.map(d=>d.domain))].sort();
     if(cat)cat.innerHTML='<option value="all">ALL DOMAINS</option>'+cats.map(c=>'<option>'+esc(c)+'</option>').join('');
     const draw=()=>{
       const q=(search?.value||'').toLowerCase().trim(), f=cat?.value||'all';
-      const rows=knowledge.filter(d=>(f==='all'||d.domain===f)&&(!q||[d.domain,d.title,d.description,d.kind].join(' ').toLowerCase().includes(q)));
+      const rows=available.filter(d=>(f==='all'||d.domain===f)&&(!q||[d.domain,d.title,d.description,d.kind].join(' ').toLowerCase().includes(q)));
       grid.innerHTML=rows.length
         ?rows.map(d=>card(d.title,d.description,d.domain+' · '+d.kind,d.href)).join('')
         :'<div class="hb-error">No matching knowledge resources.</div>';
       if($('docIndexCount'))$('docIndexCount').textContent=rows.length+' knowledge resources';
-      if($('sourceMetric'))$('sourceMetric').textContent=knowledge.length;
+      if($('sourceMetric'))$('sourceMetric').textContent=available.length;
     };
     search?.addEventListener('input',draw);
     cat?.addEventListener('change',draw);
@@ -238,13 +241,22 @@
   async function renderEbooks(){
     const grid=$('ebookGrid'); if(!grid)return;
     const show=(files)=>{
-      grid.innerHTML=files.map((x,i)=>card(String(i+1).padStart(3,'0'),x.name.replace(/\\.pdf$/i,''), 'PDF · '+((x.size||0)/1048576).toFixed(1)+' MB', x.url)).join('');
+      grid.innerHTML=files.map((x,i)=>card(String(i+1).padStart(3,'0'),x.name.replace(/\\.pdf$/i,''), 'PDF · '+((x.size||0)/1048576).toFixed(1)+' MB', x.url)).join('')||'<div class="intel-empty">No eBooks match this search.</div>';
       if($('ebookCount'))$('ebookCount').textContent=files.length+' PDFs indexed';
       if($('pdfTotal'))$('pdfTotal').textContent=files.length;
     };
     try{
-      const local=await fetch('data/source-library.json?v=20260924-1',{cache:'no-store'});
-      if(local.ok){const m=await local.json();if(Array.isArray(m.pdfs)&&m.pdfs.length){show(m.pdfs);return;}}
+      const local=await fetch('/data/source-library.json?v=20260924-1',{cache:'no-store'});
+      if(local.ok){
+        const m=await local.json();
+        if(Array.isArray(m.pdfs)&&m.pdfs.length){
+          const search=$('ebookSearch');
+          const draw=()=>{const query=search?.value.trim().toLowerCase()||'';show(m.pdfs.filter(file=>file.name.toLowerCase().includes(query)));};
+          search?.addEventListener('input',draw);
+          draw();
+          return;
+        }
+      }
     }catch(e){}
     grid.innerHTML='<div class="intel-empty">PDF INDEX OFFLINE · <a href="https://github.com/HephzibahBehulah/Hacking-Security-Ebooks" target="_blank" rel="noopener">OPEN SOURCE ARCHIVE ↗</a></div>';
     if($('ebookCount'))$('ebookCount').textContent='archive link mode';
@@ -253,7 +265,7 @@
   async function renderMega(){
     const grid=$('megaToolGrid');if(!grid)return;
     try{
-      const res=await fetch('data/source-library.json?v=20260924-4',{cache:'no-store'});
+      const res=await fetch('/data/source-library.json?v=20260924-4',{cache:'no-store'});
       const m=res.ok?await res.json():null;
       const list=(m?.tools?.length?m.tools:megaFallback.map((x,i)=>({id:i+1,name:x[0],category:x[1]})));
       if(window.HBUpgradeMegaTools) window.HBUpgradeMegaTools(list);
@@ -458,6 +470,7 @@
       renderMicroTools();
       renderEbooks();
       renderMega();
+      $("megaToolRefresh")?.addEventListener("click",renderMega);
       initQuiz();
       initSearch();
       window.__HB_INTELLIGENCE_HUB_READY=true;

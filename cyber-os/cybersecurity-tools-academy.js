@@ -92,7 +92,8 @@ function jumpToFirstResult(){
  if(card){card.scrollIntoView({behavior:"smooth",block:"start"});card.setAttribute("tabindex","-1");card.focus({preventScroll:true});}
  else root?.scrollIntoView({behavior:"smooth",block:"start"});
 }
-let expandSearchResults=false;
+const pageSize=20;
+let page=0;
 function render(){
  const root=document.getElementById("cybersecurityToolsAcademyGrid");if(!root)return;
  const H=window.CYBER_HUB||{},all=Array.isArray(H.cybersecurityTools)?H.cybersecurityTools:[];
@@ -116,7 +117,9 @@ function render(){
   ).join("")+'</div><p class="academy-browse-hint">Choose a category to browse tools. Search any tool name, alias, command, platform or keyword to jump directly to matching results.</p>';
   return;
  }
- const shown= query&&!expandSearchResults ? records.slice(0,40) : records;
+ const pageCount=Math.max(1,Math.ceil(records.length/pageSize));
+ page=Math.min(page,pageCount-1);
+ const shown=records.slice(page*pageSize,(page+1)*pageSize);
  const groups=new Map();
  shown.forEach(x=>{const c=x.category||"Other tools";if(!groups.has(c))groups.set(c,[]);groups.get(c).push(x)});
  root.innerHTML=[...groups.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([cat,items])=>
@@ -156,7 +159,7 @@ function boot(){
   const el=document.getElementById(id);
   if(el&&!el.dataset.bound){
    el.dataset.bound="1";
-   const update=()=>{expandSearchResults=false;render()};
+   const update=()=>{page=0;render()};
    el.addEventListener("input",update);el.addEventListener("change",update);
    if(id==="cybersecurityToolsAcademySearch")el.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSearchAndJump()}});
   }
@@ -165,7 +168,7 @@ function boot(){
  if(global&&academyInput&&!global.dataset.academyBound){
   global.dataset.academyBound="1";global.placeholder="Search tools: Burp Suite, Metasploit, Nmap…";
   global.setAttribute("aria-label","Search Cybersecurity Tools Academy");
-  global.addEventListener("input",()=>{academyInput.value=global.value;expandSearchResults=false;render();if(global.value.trim())document.getElementById("cybersecurity-tools-academy")?.scrollIntoView({behavior:"smooth",block:"start"});});
+  global.addEventListener("input",()=>{academyInput.value=global.value;page=0;render();if(global.value.trim())document.getElementById("cybersecurity-tools-academy")?.scrollIntoView({behavior:"smooth",block:"start"});});
   global.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSearchAndJump()}});
  }
  const root=document.getElementById("cybersecurityToolsAcademyGrid");
@@ -173,8 +176,9 @@ function boot(){
   root.dataset.progressiveBound="1";
   root.addEventListener("click",e=>{
    const cat=e.target.closest("[data-open-category]");
-   if(cat){const select=document.getElementById("cybersecurityToolsAcademyCategory");if(select){select.value=cat.dataset.openCategory;expandSearchResults=false;render();root.scrollIntoView({behavior:"smooth",block:"start"});}return;}
-   if(e.target.closest("[data-show-all-matches]")){expandSearchResults=true;render();}
+   if(cat){const select=document.getElementById("cybersecurityToolsAcademyCategory");if(select){select.value=cat.dataset.openCategory;page=0;render();root.scrollIntoView({behavior:"smooth",block:"start"});}return;}
+   const step=e.target.closest("[data-page-step]");
+   if(step){page+=Number(step.dataset.pageStep);render();root.querySelector("[data-page-step]:enabled")?.focus({preventScroll:true});root.scrollIntoView({block:"start"});}
   });
  }
  render();

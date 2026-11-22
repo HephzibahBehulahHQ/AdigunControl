@@ -193,12 +193,13 @@
     function openResult(item){
       close();
       if(item.toolId&&document.getElementById('megaTools')&&typeof window.HBMegaToolOpen==='function'){
-        document.getElementById('megaTools').scrollIntoView({behavior:'smooth',block:'start'});
+        location.hash = 'megaTools';
         window.setTimeout(()=>window.HBMegaToolOpen(item.toolId),180);
         return;
       }
       if(item.target&&item.url===location.pathname&&document.getElementById(item.target)){
-        document.getElementById(item.target).scrollIntoView({behavior:'smooth',block:'start'});
+        if (location.hash !== '#' + item.target) location.hash = item.target;
+        else document.getElementById(item.target).scrollIntoView({block:'start'});
         return;
       }
       window.location.href=item.url+(item.target?'#'+item.target:'');
