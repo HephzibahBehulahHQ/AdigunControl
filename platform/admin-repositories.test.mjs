@@ -16,7 +16,7 @@ test('repository inventory is private and requires a verified owner', async () =
 });
 
 test('inventory returns safe repository metadata and excludes forks and archives', async () => {
-  const result = await adminRepositories(request, env, identity, async (url, options) => {
+  const result = await adminRepositories(request, env, identity, async (input, options) => { const url = new URL(input);
     assert.equal(url.hostname, 'api.github.com');
     assert.equal(url.pathname, '/orgs/HephzibahBehulahHQ/repos');
     if (!options.headers.authorization) return Response.json([]);

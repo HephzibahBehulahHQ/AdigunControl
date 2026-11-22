@@ -4,7 +4,7 @@ function response(data, status = 200) {
   return Response.json(data, {status, headers: {'cache-control': 'private, no-store'}});
 }
 
-export async function adminRepositories(request, env, verified, fetcher = fetch) {
+export async function adminRepositories(request, env, verified, fetcher = (input, init) => fetch(input, init)) {
   if (!verified?.ok || !verified.identity?.email) return response({error: 'Owner sign-in required'}, 401);
   if (request.method !== 'GET') return response({error: 'Read-only endpoint'}, 405);
   if (!env.ADMIN_AI_LIMITER?.limit) return response({error: 'Repository inventory is not configured'}, 503);
@@ -20,8 +20,8 @@ export async function adminRepositories(request, env, verified, fetcher = fetch)
       endpoint.search = new URLSearchParams({...filters,per_page:'100',page:String(page)});
       const headers = {accept:'application/vnd.github+json', 'user-agent':'HB-Private-Repository-Inventory'};
       if (token) headers.authorization = 'Bearer ' + token;
-      const upstream = await fetcher(endpoint, {headers, redirect:'error', signal:AbortSignal.timeout(6000)});
-      if (!upstream.ok) throw new Error('GitHub inventory is unavailable');
+      const upstream = await fetcher(endpoint.href, {headers, redirect:'error', signal:AbortSignal.timeout(6000)});
+      if (!upstream.ok) throw new Error('GitHub HTTP ' + upstream.status);
       const payload = await upstream.json();
       const batch = search ? payload.items : payload;
       if (!Array.isArray(batch)) throw new Error('Invalid GitHub inventory response');
@@ -44,7 +44,7 @@ export async function adminRepositories(request, env, verified, fetcher = fetch)
     list().catch(() => list(undefined, true)), env.GITHUB_TOKEN ? list(env.GITHUB_TOKEN) : Promise.reject(new Error('No GitHub credential'))
   ]);
   if (publicList.status !== 'fulfilled' && credentialList.status !== 'fulfilled') {
-    return response({error:'GitHub repository inventory is unavailable'}, 502);
+    console.warn('Admin repository inventory upstream failure', [publicList.reason, credentialList.reason].map(error => String(error?.message || '').slice(0, 120))); return response({error:'GitHub repository inventory is unavailable'}, 502);
   }
   const repositories = new Map();
   for (const batch of [publicList, credentialList]) {
