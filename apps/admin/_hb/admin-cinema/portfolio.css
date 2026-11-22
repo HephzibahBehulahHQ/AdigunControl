@@ -1,0 +1,21 @@
+.os-top .hb-admin-header-mark {
+  display: inline-flex; align-items: center; gap: 10px; min-width: 0;
+}
+.hb-admin-header-mark img {
+  width: 48px; height: 34px; object-fit: cover; border: 1px solid #ad8c41; border-radius: 5px;
+}
+.hb-admin-header-mark b { font-weight: 800; letter-spacing: .075em; text-transform: uppercase; }
+.hb-admin-header-mark small { display: block; color: inherit; }
+.hb-admin-cinema { margin-block: 14px; }
+.hb-admin-cinema summary { cursor: pointer; padding-block: 8px; font-weight: 700; }
+.hb-admin-cinema .showroom { max-width: 58rem; margin-block: 8px; background: #081424; }
+.hb-admin-scope { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-block: 12px; }
+.hb-admin-scope label { display: flex; flex-direction: column; gap: 4px; min-width: min(12rem,100%); }
+.hb-admin-scope select { padding: 7px 9px; min-width: 0; max-width: 100%; font: inherit; }
+.hb-admin-record { margin-block: 8px; }
+.hb-admin-record a { text-decoration: underline; }
+@media (max-width: 620px) {
+  .os-top .hb-admin-header-mark { gap: 6px; }
+  .hb-admin-header-mark img { width: 38px; height: 29px; }
+  .hb-admin-header-mark small { font-size: 10px; }
+}

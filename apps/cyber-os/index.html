@@ -1,0 +1,303 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ADIGUN Cyber OS | HEPHZIBAH BEHULAH</title><meta name="description" content="ADIGUN Cyber OS, a product of HEPHZIBAH BEHULAH: cybersecurity learning, reference, simulation and investigation."><meta name="theme-color" content="#0b1220"><link rel="icon" type="image/svg+xml" href="/cyber-os/assets/adigun-cyber-os.svg"><link rel="manifest" href="/cyber-os/adigun-cyber-os.webmanifest"><meta name="robots" content="noindex,nofollow,noarchive"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/css/osint-redesign.css?v=20261009-3"><link rel="stylesheet" href="/cyber-os/cyber-os.css?v=20261009-2"><link rel="stylesheet" href="/css/adigun-admin.css?v=20260926-1"><link rel="stylesheet" href="/css/ai-lab.css?v=20261004-1"><link rel="stylesheet" href="/cyber-os/encyclopedia.css?v=20261001-1"><link rel="stylesheet" href="/css/recon-hub.css?v=20261004-1"><link rel="stylesheet" href="/css/mobile-system.css?v=20261004-3"><link rel="stylesheet" href="/css/hb-bot-chat.css?v=20261010-1"><link rel="stylesheet" href="/css/progressive-disclosure.css?v=20261009-2"><link rel="stylesheet" href="/cyber-os/cyber-os-deck.css?v=20261011-2">
+<style>
+/* Hard override for Cyber OS operational status indicators; keep status green regardless of domain accent. */
+body.cyber-os .os-status b,body.cyber-os .os-panel-head .live{color:#63d297!important}
+/* Cyber-OS security academy expansion */
+.academy-filter-row{display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px;margin:18px 0}
+.academy-filter-row label{display:grid;gap:7px;font-size:.72rem;letter-spacing:.08em;color:var(--muted,#9fb4c9)}
+.academy-filter-row select{width:100%;min-height:42px;padding:10px;border:1px solid var(--line,#29404e);border-radius:8px;background:var(--panel,#101a24);color:inherit}
+.academy-taxonomy{margin:18px 0 24px;padding:16px;border:1px solid var(--line,#29404e);border-radius:12px;background:rgba(8,20,30,.45)}
+.academy-category-nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.academy-workspace-map{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.academy-workspace-map span{padding:9px 10px;border:1px solid var(--line,#29404e);border-radius:7px;background:rgba(28,49,64,.35);font-size:.78rem}
+.academy-category-nav button,.quick-launch-grid button{border:1px solid var(--line,#29404e);border-radius:999px;padding:8px 11px;background:rgba(28,49,64,.65);color:inherit;cursor:pointer;font:inherit;font-size:.78rem}
+.academy-category-nav button:hover,.quick-launch-grid button:hover{border-color:var(--accent,#6ce5c1)}
+.academy-setup-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0}
+.academy-setup-card{min-width:0;padding:18px;border:1px solid var(--line,#29404e);border-radius:12px;background:rgba(11,24,35,.72)}
+.academy-setup-card h4{margin:16px 0 6px;font-size:.84rem}
+.academy-setup-card p,.academy-setup-card li{font-size:.86rem;line-height:1.6;color:var(--muted,#b2c3d0)}
+.academy-setup-card ul,.academy-setup-card ol{padding-left:20px}
+.academy-setup-card pre{overflow:auto;padding:12px;border-radius:8px;background:#071018;border:1px solid var(--line,#29404e);white-space:pre-wrap;overflow-wrap:anywhere}
+.academy-setup-card pre code,.tool-command{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.78rem;color:#b9f5df}
+.academy-note{margin-top:12px;padding:10px;border-left:3px solid var(--accent,#6ce5c1);background:rgba(65,130,117,.09);font-size:.78rem!important}
+.academy-heading{font-size:.76rem;font-weight:800;letter-spacing:.08em;margin-bottom:12px}
+.academy-quick-launch{margin-top:16px}
+.quick-launch-grid{display:flex;flex-wrap:wrap;gap:8px}
+.tool-category-group{margin:24px 0}
+.tool-category-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line,#29404e);margin-bottom:14px}
+.tool-category-heading h3{margin:0;font-size:1.1rem}
+.tool-category-heading span,.tool-level{font-size:.68rem;letter-spacing:.08em;color:var(--muted,#9fb4c9)}
+.tool-record-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.cybersecurity-tool-card{min-width:0;display:flex;flex-direction:column;gap:9px;scroll-margin-top:90px}
+.tool-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cybersecurity-tool-card h4{margin:0;font-size:1.05rem}
+.cybersecurity-tool-card>p{margin:0;line-height:1.55}
+.tool-field{padding-top:9px;border-top:1px solid rgba(120,150,170,.17)}
+.tool-field>span{display:block;margin-bottom:5px;font-size:.66rem;font-weight:800;letter-spacing:.09em;color:var(--muted,#9fb4c9)}
+.tool-field p{margin:0;font-size:.82rem;line-height:1.55;overflow-wrap:anywhere}
+.tool-command{display:block;padding:10px;border:1px solid var(--line,#29404e);border-radius:7px;background:#071018;white-space:pre-wrap;overflow-wrap:anywhere}
+.tool-example{margin-top:8px!important}
+.tool-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:.7rem;color:var(--muted,#9fb4c9);overflow-wrap:anywhere}
+.tool-doc-link{align-self:flex-start;margin-top:4px}
+.xp-table>div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid rgba(120,150,170,.17);font-size:.86rem}
+.xp-table b{white-space:nowrap;color:var(--accent,#6ce5c1)}
+@media(max-width:1000px){.academy-setup-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.academy-filter-row,.academy-setup-grid,.tool-record-grid,.academy-workspace-map{grid-template-columns:1fr}.tool-category-heading{align-items:flex-start;flex-direction:column}}
+</style><link rel="stylesheet" href="/css/adigun-sidebar.css?v=20261010-1">
+</head><body class="osint-redesign cyber-os"><div class="os-shell"><aside class="os-sidebar"><a class="os-brand hb-product-lockup" href="https://hephzibahbehulah.com/" aria-label="HEPHZIBAH BEHULAH, ADIGUN Cyber OS"><span class="hb-company-wordmark"><img class="hb-company-logo" src="/_hb/hephzibah-behulah-official.jpg" alt="HEPHZIBAH BEHULAH"></span><span class="hb-brand-divider" aria-hidden="true"></span><span class="hb-product-wordmark">ADIGUN<small>CYBER OS · A PRODUCT OF HEPHZIBAH BEHULAH</small></span></a>
+<details class="os-nav-dropdown" data-nav-group="core" open><summary class="os-side-label">CORE</summary><nav class="os-nav" aria-label="Core workspace">
+<a class="active" href="#dashboard">⌂ DASHBOARD</a><a href="#knowledge-hub">▦ KNOWLEDGE HUB</a><a href="#networking">⌁ NETWORKING</a><a href="#network-academy">⌁ NETWORK ACADEMY</a>
+</nav></details>
+<details class="os-nav-dropdown" data-nav-group="reconnaissance"><summary class="os-side-label">RECONNAISSANCE</summary><nav class="os-nav" aria-label="Reconnaissance workspace">
+<a href="#recon-overview">◉ RECONNAISSANCE</a><a href="#recon-workflow">⌁ WORKFLOW</a><a href="#recon-toolkit">◉ TOOLKIT</a><a href="#recon-queries">⌕ QUERY LAB</a><a href="#recon-evidence">▤ EVIDENCE</a><a href="#recon-learning">✦ LEARNING</a>
+</nav></details>
+<details class="os-nav-dropdown" data-nav-group="intelligence"><summary class="os-side-label">INTELLIGENCE</summary><nav class="os-nav" aria-label="Intelligence workspace">
+<a href="#commands">⌘ COMMAND CENTER</a><a href="#shortcuts">⌨ KEYBOARD LAB</a><a href="#frameworks">◎ FRAMEWORKS</a><a href="#osint">◉ OSINT</a><a href="#detection">△ DETECTION</a><a href="#teams">◇ TEAMS &amp; ACTORS</a><a href="#formulas">∑ FORMULAS</a>
+</nav></details>
+<details class="os-nav-dropdown" data-nav-group="learning-labs"><summary class="os-side-label">LEARNING &amp; LABS</summary><nav class="os-nav" aria-label="Learning and labs">
+<a href="#games">✦ CYBER GAMES</a><a href="#labs">▣ LABS</a><a href="#glossary">▤ GLOSSARY</a><a href="#learning">↗ LEARNING PATH</a><a href="#cybersecurity-tools-academy">▤ CYBERSECURITY TOOLS ACADEMY</a>
+</nav></details>
+<details class="os-nav-dropdown" data-nav-group="ai-assistants"><summary class="os-side-label">AI &amp; ASSISTANTS</summary><nav class="os-nav" aria-label="AI and assistants">
+<a href="#terminal">▣ LINUX TERMINAL</a><a href="#operator">⌁ ADMIN AI</a><a href="#ai-agent">◉ PUBLIC AI</a>
+</nav></details>
+<nav class="os-nav os-nav-standalone" aria-label="Main navigation">
+<a href="https://hephzibahbehulah.com/index.html">↩ INTELLIGENCE PORTFOLIO</a>
+<a href="https://hephzibahbehulah.com/index.html#terminal">⌘ PORTFOLIO TERMINAL</a>
+<a href="/admin">◉ ADIGUN CONTROL</a>
+<a href="/admin/tools/">▤ TOOL WORKSPACE</a>
+</nav>
+<details class="os-nav-dropdown" data-nav-group="external"><summary class="os-side-label">EXTERNAL</summary><nav class="os-nav" aria-label="External links">
+<a href="https://hephzibahbehulah.com">← PUBLIC SITE</a><a href="https://github.com/HephzibahBehulah">◉ GitHub</a><a href="https://www.linkedin.com/in/isaacoluwoleadigun">in LinkedIn</a><a href="https://x.com/HephzibahBehulah">𝕏 X</a><a href="https://www.facebook.com/HephzibahBehulah">f Facebook</a><a href="https://gitbook.io/">▤ GitBook</a>
+</nav></details>
+<details class="os-nav-dropdown" data-nav-group="cyber-references"><summary class="os-side-label">CYBER REFERENCES</summary><nav class="os-nav" aria-label="Cyber references">
+<a href="https://owasp.org/www-project-web-security-testing-guide/">OWASP WSTG ↗</a><a href="https://projectdiscovery.io/open-source">ProjectDiscovery ↗</a><a href="https://urlscan.io/">urlscan.io ↗</a><a href="https://crt.sh/">crt.sh ↗</a>
+</nav></details>
+<div class="os-status">CYBER OS STATUS<br><b>● READY</b><br>mode: learning + authorised practice<br>knowledge: structured + source-aware</div><div class="os-status">RECON STATUS<br><b>● READY</b><br>mode: passive-first<br>scope: authorised only<br>evidence: provenance-first</div></aside><main class="os-main"><header class="os-top"><div class="os-breadcrumb">adigun / <b>ADIGUN cyber os</b></div><div class="cyber-top-search"><input id="globalSearch" class="os-search" placeholder="Search protocols, ports, commands, frameworks, formulas..." aria-label="Search Cyber OS"><span id="searchMeta">READY</span></div></header><div class="os-content"><section class="os-panel hb-cyber-overview" id="dashboard" aria-label="Cyber OS intelligence dashboard"><div class="hb-cyber-heading"><span>ADIGUN CYBER OS · SECURITY INTELLIGENCE</span><span class="live">● OPERATIONAL</span></div><div class="hb-cyber-grid"><div class="hb-cyber-mission"><p class="hb-hero-eyebrow">ETHICAL CYBER OPERATIONS</p><h1>CYBER <em>OS</em></h1><h2>Turn unknown signals into understandable, verified security knowledge.</h2><p>Reconnaissance, OSINT, networking, detection, evidence, frameworks, labs and human-readable security learning in one connected operating environment.</p><div class="hb-identity-console"><div><b>hb@intel:~$</b><span>whoami</span><strong>Hephzibah Behulah</strong></div><div><b>hb@intel:~$</b><span>background</span><strong>electronics → automation → software</strong></div><div><b>hb@intel:~$</b><span>current_focus</span><strong>cybersecurity · data · Python · OSINT</strong></div><div><b>hb@intel:~$</b><span>method</span><strong>observe → research → build → test → document</strong></div><div><b>hb@intel:~$</b><span>ethics</span><strong>legal · authorised · privacy-aware</strong></div></div><div class="os-actions"><a class="os-btn primary" href="#recon-overview">Enter reconnaissance →</a><a class="os-btn" href="#knowledge-hub">Explore knowledge</a><a class="os-btn" href="#detection">Open detection</a></div></div><aside class="hb-cyber-guardian"><img src="/assets/hb-logo.svg" alt="Hephzibah Behulah" width="180" height="54"><svg viewBox="0 0 320 320" role="img" aria-label="Animated ethical cybersecurity guardian"><defs><linearGradient id="hbGuard" x2="1" y2="1"><stop stop-color="#6ee7ff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><circle class="hb-guardian-ring" cx="160" cy="160" r="142"/><circle class="hb-guardian-ring inner" cx="160" cy="160" r="116"/><path class="hb-guardian-hood" d="M78 237Q74 107 160 66Q246 107 242 237L213 262H107Z"/><path class="hb-guardian-face" d="M110 149Q160 119 210 149L200 213Q160 248 120 213Z"/><path class="hb-guardian-visor" d="M113 166L149 177M207 166L171 177"/><path class="hb-guardian-lock" d="M146 202V191A14 14 0 0 1 174 191V202M140 202H180V229H140Z"/><path class="hb-guardian-scan" d="M76 155H244"/><path class="hb-guardian-circuit" d="M36 115H65V96H95M284 115H255V96H225M38 235H68V254H95M282 235H252V254H225"/></svg><strong>DEFEND · INVESTIGATE · UNDERSTAND</strong><p>Legal · authorised · privacy-aware</p><div class="hb-cyber-signals"><span>Collection <b>READY</b></span><span>Analysis <b>READY</b></span><span>Evidence <b>PROVENANCE</b></span></div></aside></div><div class="hb-cyber-workflow" aria-label="Intelligence workflow">COLLECT <span>→</span> CORRELATE <span>→</span> ANALYSE <span>→</span> VERIFY <span>→</span> LEARN</div><nav class="hb-cyber-capabilities" aria-label="Cyber OS capability map"><a href="#recon-overview"><b>RECON</b><span>Discover assets, signals and attack surface</span></a><a href="#osint"><b>OSINT</b><span>Source-aware intelligence and verification</span></a><a href="#detection"><b>DETECTION</b><span>Events, indicators, lifecycle and response</span></a><a href="#recon-evidence"><b>EVIDENCE</b><span>Provenance, confidence and analyst records</span></a><a href="#frameworks"><b>FRAMEWORKS</b><span>NIST, MITRE and security models</span></a><a href="#labs"><b>LABS</b><span>Authorised practice and simulation</span></a></nav></section><div class="cyber-stats cyber-deck-stats" id="stats"></div><section class="os-panel" id="knowledge-hub"><div class="os-panel-head"><span>00 / KNOWLEDGE HUB</span><span>READ · SEARCH · UNDERSTAND · CONNECT</span></div><div id="hubCatalogs" class="cyber-grid"></div><div class="detail-panel" id="hubModels"></div><div class="panel-tools"><input id="hubSearch" placeholder="Search tools, commands, shortcuts, ports, models, hackers, teams, electronics..."><select id="hubFilter"><option value="all">ALL KNOWLEDGE</option><option value="networkTools">NETWORK TOOLS</option><option value="cybersecurityTools">CYBERSECURITY TOOLS</option><option value="protocols">PORTS & PROTOCOLS</option><option value="windowsCommands">WINDOWS COMMANDS</option><option value="linuxCommands">LINUX COMMANDS</option><option value="shortcuts">KEYBOARD SHORTCUTS</option><option value="powerTricks">POWER TRICKS</option><option value="suspicious">SUSPICIOUS ACTIVITY</option><option value="hackerTypes">HACKER TYPES</option><option value="teams">SECURITY TEAMS</option><option value="platforms">SECURITY PLATFORMS</option><option value="electronics">ELECTRONICS</option></select></div><div id="hubResults" class="cyber-grid"></div></section><section class="os-panel cybersecurity-tools-academy" id="cybersecurity-tools-academy">
+<div class="os-panel-head"><span>01 / CYBER-OS™ SECURITY OPERATIONS CENTER</span><span id="cybersecurityToolsAcademyCount">LOADING TOOL CATALOGUE…</span></div>
+<div class="cyber-tools-academy-intro">
+<div><span class="os-kicker">WSL · LINUX · macOS · AUTHORISED LABS</span><h2>Cybersecurity Tools Academy</h2><p>A structured, searchable security operations catalogue. Each record shows category, purpose, platform support, installation guidance, launch reference, difficulty, safe-use requirements and official documentation. Commands are references, not a remote execution console.</p><div class="os-actions"><a class="os-btn primary" href="#cyber-os-terminal-reference">TERMINAL & SETUP ↓</a><a class="os-btn" href="#cyber-os-player-levels">PLAYER LEVELS & XP ↓</a><a class="os-btn" href="#labs">AUTHORISED LABS ↓</a></div></div>
+<label class="cyber-tools-academy-search"><span>SEARCH THE FULL TOOL CATALOGUE</span><input id="cybersecurityToolsAcademySearch" type="search" placeholder="Search tool, category, command, platform, purpose…" aria-label="Search cybersecurity tools academy"><small>Search across names, subcategories, commands, installation notes, tags and platform support.</small></label>
+</div>
+<div class="academy-filter-row"><label>FILTER CATEGORY<select id="cybersecurityToolsAcademyCategory"><option value="all">All categories</option></select></label><label>FILTER PLATFORM<select id="cybersecurityToolsAcademyPlatform"><option value="all">All platforms</option><option>WSL</option><option>Linux</option><option>macOS</option><option>Windows</option><option>Browser</option></select></label></div>
+<div class="academy-taxonomy"><div class="academy-subheading">CYBER-OS SIDEBAR TAXONOMY / CATEGORY INDEX</div><div id="cybersecurityToolsAcademyCategoryNav" class="academy-category-nav"><span>Loading categories…</span></div></div>
+<div class="academy-taxonomy"><div class="academy-subheading">SOC WORKSPACE MAP / PLANNED SIDEBAR SECTIONS</div><p>Workspace navigation blueprint for the Cyber-OS portal. Tool categories below are searchable in this Academy; workspace destinations can be connected to dedicated pages as those modules are implemented.</p><div class="academy-workspace-map">
+<span>Dashboard</span><span>Quick Launch</span><span>Terminal Center</span><span>Recon & OSINT</span><span>Attack Surface Management</span><span>Network Discovery</span><span>Web Application Security</span><span>Vulnerability Assessment</span><span>Exploitation Frameworks</span><span>Active Directory Operations</span><span>Cloud Security</span><span>Container Security</span><span>API Security</span><span>Wireless Security</span><span>Social Engineering Lab</span><span>Password & Hash Operations</span><span>Malware Analysis Lab</span><span>Reverse Engineering</span><span>Digital Forensics</span><span>Threat Hunting</span><span>Incident Response</span><span>Red Team Arsenal</span><span>Blue Team Defense</span><span>Purple Team Arena</span><span>CTF & Cyber Games</span><span>AI Security Tools</span><span>Payload Libraries</span><span>Wordlists Center</span><span>Reports & Exports</span><span>Learning Academy</span><span>Labs & Sandboxes</span><span>WSL Control Center</span><span>Linux Control Center</span><span>macOS Security Console</span><span>Settings</span>
+</div></div>
+<div id="cyber-os-terminal-reference" class="academy-setup-grid">
+<article class="academy-setup-card"><div class="academy-heading">UNIVERSAL TERMINAL ACCESS</div><p>Open the terminal for your installed environment. These commands open or inspect environments; they do not install the catalogue automatically.</p><h4>Windows WSL</h4><pre><code>wsl
+wsl -d Ubuntu
+wsl -l -v
+wsl --shutdown</code></pre><h4>Ubuntu / Linux desktop</h4><pre><code>gnome-terminal
+konsole
+xterm
+kitty
+terminator
+tmux
+screen</code></pre><h4>Kali Linux</h4><pre><code>kali
+gnome-terminal
+tmux
+screen</code></pre><h4>macOS</h4><pre><code>open -a Terminal
+open -a iTerm</code></pre><h4>WSL control center</h4><pre><code># list distributions and versions
+wsl -l -v
+
+# restart a distribution
+wsl --terminate Ubuntu
+wsl -d Ubuntu
+
+# verify tools available on PATH
+which subfinder nuclei httpx ffuf sqlmap hydra nmap</code></pre><p class="academy-note">A terminal command may not exist on every installation. WSL distributions and GUI terminal apps must already be installed.</p></article>
+<article class="academy-setup-card"><div class="academy-heading">BASE SYSTEM & CORE DEPENDENCIES</div><p>Install a small, auditable baseline first. Review package names for your distribution before expanding the toolset.</p><h4>Ubuntu / Debian / Kali</h4><pre><code>sudo apt update
+sudo apt install -y whois dnsutils curl wget jq git vim nano \
+  python3 python3-pip python3-venv pipx golang-go \
+  docker.io docker-compose nmap masscan netdiscover net-tools</code></pre><h4>Kali full metapackage (large download)</h4><pre><code>sudo apt update
+sudo apt install -y kali-linux-large</code></pre><p class="academy-note">Check free disk space and review package changes first. This metapackage can install a very large set of tools.</p><h4>Verify installed commands</h4><pre><code>command -v nmap
+command -v whois
+command -v dig
+command -v curl
+command -v python3
+which subfinder nuclei httpx ffuf sqlmap hydra nmap</code></pre><p class="academy-note">Do not install a “complete arsenal” blindly. Packages can be large, privileged, distro-specific or conflict with existing software. Review each tool’s official installation guide.</p></article>
+<article class="academy-setup-card"><div class="academy-heading">INSTALLATION POLICY & SAFETY</div><p>Cyber-OS is a reference and learning interface. It does not run commands on your computer or remotely install tools.</p><ul><li>Prefer official releases, distribution repositories and signed packages.</li><li>Inspect scripts before executing them; avoid piping remote scripts directly to a shell.</li><li>Use least privilege; do not add <code>sudo</code> unless the documented task requires it.</li><li>Use private, isolated virtual machines or intentionally vulnerable labs for active tests.</li><li>Keep API keys, passwords, private keys and captured traffic out of public logs.</li></ul><p class="academy-note">The third-party “bug bounty toolkit” script is not a default installer recommendation. If you choose to inspect it, download for review first: <code>curl -fsSLo /tmp/bug-bounty-toolkit-install.sh https://raw.githubusercontent.com/shayanrsh/bug-bounty-toolkit-install-script/main/install.sh</code>, then read it with <code>less /tmp/bug-bounty-toolkit-install.sh</code>. Do not execute it until you have audited its contents, dependencies and permissions.</p></article>
+</div>
+<div class="academy-setup-card academy-quick-launch"><div class="academy-heading">TERMINAL DASHBOARD / QUICK LAUNCH FAVOURITES</div><p>Choose a command reference to copy it. This only copies text; it does not execute it.</p><div class="quick-launch-grid" id="cyberOsQuickLaunch"></div><p class="academy-note">Commands that scan, capture traffic, test authentication, or modify a system must be limited to assets and lab environments where you have explicit permission.</p></div>
+<div id="cybersecurityToolsAcademyGrid" class="cyber-grid academy-tool-groups" aria-live="polite"><div class="detail-panel">Loading the categorized security tool catalogue…</div></div>
+<div id="cyber-os-player-levels" class="academy-setup-grid academy-gamification"><article class="academy-setup-card"><div class="academy-heading">CYBER-OS PLAYER LEVELS</div><ol><li><b>Level 1 · Recon Scout</b></li><li><b>Level 2 · Enumerator</b></li><li><b>Level 3 · Analyst</b></li><li><b>Level 4 · Operator</b></li><li><b>Level 5 · Threat Hunter</b></li><li><b>Level 6 · Reverse Engineer</b></li><li><b>Level 7 · Red Team Operator</b></li><li><b>Level 8 · Blue Team Defender</b></li><li><b>Level 9 · Purple Team Commander</b></li><li><b>Level 10 · Cyber Architect</b></li></ol></article><article class="academy-setup-card"><div class="academy-heading">XP REWARD REFERENCE</div><div class="xp-table"><div><span>Recon completed</span><b>+50 XP</b></div><div><span>Lab completed</span><b>+100 XP</b></div><div><span>CTF solved</span><b>+200 XP</b></div><div><span>Report submitted</span><b>+250 XP</b></div><div><span>Machine rooted</span><b>+500 XP</b></div><div><span>Challenge series</span><b>+1000 XP</b></div></div><p class="academy-note">These are progression rules for future learning-state integration. XP is not persisted unless a separate progress feature is connected.</p></article></div>
+<div class="cyber-tools-academy-foot">LEARN FIRST · TEST ONLY WITH AUTHORISATION · OFFICIAL DOCS · NO COMMAND EXECUTION FROM THIS PAGE</div>
+</section>
+<section class="os-panel admin-section" id="terminal"><div class="os-panel-head"><span>LINUX TERMINAL</span><span id="terminalState">READY</span></div><div class="admin-terminal" aria-label="ADIGUN Control Terminal"><div class="admin-terminal-banner"><strong>ADIGUN TERMINAL</strong><br>Type HELP to explore commands. Use tools only on systems you are authorised to assess.</div><div id="adigunTerminal" class="admin-terminal-screen" role="log" aria-live="polite"><div class="admin-terminal-line system">ADIGUN TERMINAL · Type HELP to begin.</div></div><div class="admin-terminal-composer"><div class="admin-terminal-hints"><span>COMMAND ENGINE</span><button type="button" data-terminal-command="help">help</button><button type="button" data-terminal-command="list">list</button><button type="button" data-terminal-command="man domain">man domain</button><button type="button" data-terminal-command="selftest">selftest</button><button type="button" data-terminal-command="site health">site health</button><button type="button" data-terminal-command="recon">recon</button></div><div class="admin-terminal-input-row"><span class="admin-terminal-prompt">adigun@control:~$</span><input id="terminalCommand" class="admin-terminal-command" list="terminalCommands" placeholder="enter command…" autocomplete="off" spellcheck="false" aria-label="Terminal command"><datalist id="terminalCommands"></datalist><button class="os-btn primary" id="terminalRun" type="button">RUN</button><button class="os-btn" id="terminalClear" type="button">CLEAR</button></div><div class="admin-terminal-status" id="terminalMeta">Command registry loading…</div></div></div></section>
+
+<section class="os-panel admin-section" id="operator"><div class="os-panel-head"><span>ADMIN AI</span><span>INVESTIGATE → PLAN → APPROVE</span></div><div class="admin-chat"><div class="admin-chat-messages" id="adminMessages"><div class="admin-chat-message system">PRIVATE ADIGUN // authenticated operator online.</div><div class="admin-chat-message assistant">Ask ADIGUN to investigate a problem. It can gather evidence automatically, explain what it found, and produce an approval-gated action plan.</div></div><div class="admin-attachments" id="adminAttachmentChips"></div><div class="admin-chat-input"><input id="adminAttachmentInput" type="file" multiple accept=".pdf,.doc,.docx,.txt,.md,.csv,.json,.log,.xml,.xlsx,.xls,.yaml,.yml,.js,.ts,.py,.html,.css,.sql,.sh,.png,.jpg,.jpeg,.webp,.gif"><button class="os-btn" id="adminAttach" type="button">📎 ATTACH</button><input id="adminInput" placeholder="Ask Private ADIGUN..." autocomplete="off"><button id="adminSend" class="os-btn primary" type="button">SEND</button></div></div></section>
+
+<section class="os-panel ai-section admin-section" id="ai-agent"><div class="os-panel-head"><span>PUBLIC AI</span><span id="aiState">● READY</span></div><div class="ai-agent-grid"><div class="ai-console"><div class="ai-console-head"><span>ADIGUN / INTELLIGENCE</span><span>LOCAL + WEB · MULTIMODAL</span></div><div id="aiMessages" class="ai-messages"><div class="ai-message system">ADIGUN // multimodal site intelligence online.</div><div class="ai-message assistant">Ask a question, attach a file or image, add a video, upload voice, or record a message. ADIGUN processes the supplied material before answering.</div></div><div class="ai-composer"><div id="aiAttachmentChips" class="ai-attachment-chips" aria-live="polite"></div><div class="ai-input-row"><button id="aiAdd" class="ai-icon-btn" type="button" title="Add an attachment" aria-label="Add an attachment">＋</button><button id="aiFile" class="ai-icon-btn" type="button" title="Attach a file" aria-label="Attach a file">📎</button><button id="aiPhoto" class="ai-icon-btn" type="button" title="Attach a photo or image" aria-label="Attach a photo or image">▧</button><button id="aiVideo" class="ai-icon-btn" type="button" title="Attach a video" aria-label="Attach a video">▶</button><button id="aiVoice" class="ai-icon-btn" type="button" title="Attach voice or audio" aria-label="Attach voice or audio">♩</button><button id="aiRecord" class="ai-icon-btn record" type="button" title="Record a voice message" aria-label="Record a voice message">●</button><textarea id="aiInput" rows="1" placeholder="Message ADIGUN... attach files, photos or video, add voice, or record." autocomplete="off"></textarea><button id="aiSend" class="os-btn primary" type="button">SEND</button></div><input id="aiFileInput" type="file" hidden multiple accept=".pdf,.doc,.docx,.txt,.md,.csv,.json,.log,.xml,.xlsx,.xls,.yaml,.yml,.js,.ts,.py,.html,.css,.sql,.sh,.zip,.rtf,.odt,.ods,.ppt,.pptx"><input id="aiPhotoInput" type="file" hidden multiple accept="image/png,image/jpeg,image/webp,image/gif"><input id="aiVideoInput" type="file" hidden multiple accept="video/mp4,video/webm,video/quicktime,video/x-matroska"><input id="aiVoiceInput" type="file" hidden multiple accept="audio/*"></div></div><div class="ai-capabilities"><div class="ai-card"><b>RAG</b><span>Retrieve relevant project and knowledge records before answering.</span></div><div class="ai-card"><b>FILES</b><span>Send supported documents and code directly to the AI model for inspection.</span></div><div class="ai-card"><b>VISION</b><span>Inspect photos and representative video frames supplied with your request.</span></div><div class="ai-card"><b>VOICE</b><span>Transcribe uploaded or recorded audio, then give the transcript to ADIGUN for analysis.</span></div></div></div></section><section class="os-panel" id="connected-search"><div class="os-panel-head"><span>00A / CONNECTED KNOWLEDGE</span><span>ONE QUESTION → MANY RELATED ANSWERS</span></div><div id="knowledgeResult"></div></section><section class="os-panel" id="scale"><div class="os-panel-head"><span>00B / SCALE STATUS</span><span>LOADED RECORDS · SOURCE-BACKED GROWTH</span></div><div id="scaleStatus" class="cyber-grid"></div></section><section class="os-panel" id="networking"><div class="os-panel-head"><span>01 / NETWORKING CORE</span><span>OSI · TCP/IP · PORTS · PROTOCOLS</span></div><div class="panel-tools"><input id="networkSearch" placeholder="Search protocol or port..."><select id="networkFilter"><option value="all">ALL</option><option value="protocol">PROTOCOLS</option><option value="port">PORTS</option><option value="layer">LAYERS</option></select></div><div id="networkGrid" class="cyber-grid"></div></section><section class="os-panel network-academy-panel" id="network-academy">
+<div class="os-panel-head"><span>01A / NETWORK ACADEMY</span><span>INTRODUCTION TO COMPUTER NETWORKS · 2026</span></div>
+<div class="network-academy-hero">
+<div><div class="os-kicker">HOW DATA REALLY TRAVELS</div><h2 id="networkAcademyTitle">Introduction to Computer Networks</h2><p id="networkAcademySubtitle"></p><p id="networkAcademyMission" class="academy-mission"></p></div>
+<div class="academy-search"><input id="networkAcademySearch" placeholder="Search networking lessons, protocols, layers, labs..."><span>SEARCH · UNDERSTAND · CONNECT · PRACTICE</span></div>
+</div>
+<div class="academy-block"><div class="academy-heading">TODAY'S 2-HOUR JOURNEY</div><div id="networkJourney" class="academy-timeline-grid"></div></div>
+<div class="academy-block"><div class="academy-heading">LEARNING OBJECTIVES</div><div id="networkObjectives" class="cyber-grid"></div></div>
+<div class="academy-block"><div class="academy-heading">01 / NETWORK FOUNDATIONS</div><div class="academy-subheading">Types of networks</div><div id="networkTypes" class="cyber-grid"></div><div class="academy-subheading">Devices that run modern networks</div><div id="networkDevices" class="cyber-grid"></div></div>
+<div class="academy-block"><div class="academy-heading">02 / THINK IN LAYERS</div><div class="academy-subheading">TCP/IP: the practical four-layer map</div><div id="tcpipLayers" class="cyber-grid"></div><div class="academy-subheading">OSI: the seven-layer thinking map</div><div id="osiLayers" class="cyber-grid"></div></div>
+<div class="academy-block"><div class="academy-heading">03 / PROTOCOLS, PORTS & ADDRESSES</div><div class="academy-subheading">Common services and ports</div><div id="networkProtocols" class="cyber-grid"></div><div class="academy-subheading">IP, MAC and CIDR</div><div id="networkAddresses" class="cyber-grid"></div><div class="academy-subheading">DHCP · NAT · DNS · HTTP · ARP · ICMP · TLS</div><div id="networkServices" class="cyber-grid"></div><div class="academy-subheading">TCP · UDP · QUIC</div><div id="networkTransport" class="cyber-grid"></div></div>
+<div class="academy-block"><div class="academy-heading">04 / FOLLOW A PACKET</div><div id="packetJourney" class="academy-steps"></div><div class="academy-callout">Sending moves down the stack; receiving moves up. At every routed hop, the Layer 2 framing can change while the IP packet continues toward its destination.</div></div>
+<div class="academy-block"><div class="academy-heading">05 / THE JOURNEY OF A URL</div><div id="urlJourney" class="academy-steps"></div></div>
+<div class="academy-block"><div class="academy-heading">06 / NETWORKS IN THE AI AGE</div><div class="academy-callout">Every chatbot message is a network journey. The exact provider architecture varies, but the high-level path is client → access network → Internet/provider networks → service edge → application/model infrastructure → response.</div><div id="aiJourney" class="academy-steps"></div></div>
+<div class="academy-block"><div class="academy-heading">07 / NETWORK SECURITY CONNECTIONS</div><div id="networkSecurity" class="cyber-grid"></div></div>
+<div class="academy-block"><div class="academy-heading">08 / NAME THAT LAYER</div><div id="networkGame" class="academy-game"></div><div id="networkGameResult" class="academy-game-result"></div></div>
+<div class="academy-block"><div class="academy-heading">09 / TROUBLESHOOTING METHOD</div><div id="networkTroubleshooting" class="academy-steps"></div></div>
+<div class="academy-block"><div class="academy-heading">10 / HANDS-ON LABS</div><div id="networkLabs" class="cyber-grid"></div></div>
+<div class="academy-block"><div class="academy-heading">11 / GO DEEPER</div><div id="networkMore" class="cyber-grid"></div></div>
+<div class="academy-block"><div class="academy-heading">12 / HOMEWORK & AI-TUTOR RULES</div><div id="networkHomework" class="cyber-grid"></div></div>
+</section><section class="recon-hero" id="recon-overview">
+<div class="os-panel"><div class="os-panel-head"><span>ADIGUN reconnaissance intelligence desk</span><span class="live">● passive-first</span></div><div class="os-panel-body">
+<div class="os-kicker">OSINT × ATTACK SURFACE × VERIFICATION</div>
+<h1 class="os-title">Reconnaissance<br><em>Operations</em></h1>
+<p class="os-lead">A structured map for discovering domains, subdomains, certificates, DNS records, people and organisation signals, exposed services, historical URLs and application technology. Start passive, correlate multiple sources, record evidence, then move to authorised active validation.</p>
+<div class="os-actions"><a class="os-btn primary" href="#recon-overview">open ADIGUN CYBER OS →</a><a class="os-btn" href="#recon-workflow">follow workflow</a><a class="os-btn" href="#recon-queries">query lab</a></div>
+</div></div>
+<div class="os-panel"><div class="os-panel-head"><span>analyst model</span><span>00</span></div><div class="os-panel-body recon-console">
+<div><span class="prompt">hb@recon:~$</span> objective</div><div class="value">reduce unknowns</div>
+<div><span class="prompt">hb@recon:~$</span> sequence</div><div>scope → passive → correlate → resolve → inspect → validate</div>
+<div><span class="prompt">hb@recon:~$</span> rule</div><div class="key">one source ≠ truth</div>
+<div><span class="prompt">hb@recon:~$</span> evidence</div><div>source + timestamp + query + result + confidence</div>
+<div><span class="prompt">hb@recon:~$</span> boundary</div><div class="key">authorised targets only</div>
+</div></div>
+</section>
+
+<div class="recon-stats"><div><b>12</b><span>recon domains</span></div><div><b id="toolCount">40+</b><span>mapped tools</span></div><div><b>6</b><span>workflow phases</span></div><div><b>1</b><span>operating rule: verify</span></div></div>
+
+<section class="os-panel" id="recon-workflow"><div class="os-panel-head"><span>01 / reconnaissance workflow</span><span>passive → active</span></div>
+<div class="workflow">
+<div class="flow-card"><i>01</i><b>Scope</b><span>Write the authorised domain, IP range, application or organisation boundary. Record exclusions.</span></div>
+<div class="flow-card"><i>02</i><b>Discover</b><span>Collect public names, certificates, DNS, indexed URLs, historical assets and organisation signals.</span></div>
+<div class="flow-card"><i>03</i><b>Correlate</b><span>Join subdomains, IPs, ASNs, certificates, technologies and historical records. Expect gaps.</span></div>
+<div class="flow-card"><i>04</i><b>Resolve</b><span>Confirm which discovered names currently resolve and identify CNAME, A, AAAA, MX and NS relationships.</span></div>
+<div class="flow-card"><i>05</i><b>Inspect</b><span>For authorised targets, inspect HTTP metadata, technologies, pages, screenshots and application entry points.</span></div>
+<div class="flow-card"><i>06</i><b>Validate</b><span>Manually verify important findings. Preserve source, timestamp and evidence before calling something a finding.</span></div>
+</div>
+<div class="recon-warning"><b>SAFETY BOUNDARY</b> Passive OSINT can still expose personal or sensitive information. Minimise collection, respect terms and privacy, and do not pivot into intrusive testing unless the target and action are explicitly authorised.</div>
+</section>
+
+<section class="os-panel" id="recon-toolkit"><div class="os-panel-head"><span>02 / reconnaissance toolkit</span><span id="toolResultCount">all tools</span></div>
+<div class="resource-controls recon-controls"><label><span>⌕</span><input id="toolSearch" placeholder="Search tools, signals, use cases..."></label><select id="toolCategory"><option value="all">ALL DOMAINS</option></select><button id="toolReset" class="os-mini" type="button">reset</button></div>
+<div id="toolGrid" class="recon-grid"></div>
+</section>
+
+<section class="os-panel" id="recon-queries"><div class="os-panel-head"><span>03 / query lab</span><span>templates, not targets</span></div>
+<div class="query-grid">
+<div class="query-card"><b>SEARCH ENGINE</b><code>site:example.com filetype:pdf</code><span>Locate indexed documents on an authorised domain.</span></div>
+<div class="query-card"><b>SUBDOMAIN</b><code>site:*.example.com</code><span>Use search indexing as one discovery signal, then corroborate with DNS/CT data.</span></div>
+<div class="query-card"><b>CERTIFICATE</b><code>%.example.com</code><span>Use CT portals to inspect certificate names and issuance history.</span></div>
+<div class="query-card"><b>URLSCAN</b><code>domain:example.com</code><span>Search historical public website scans and observed web activity.</span></div>
+<div class="query-card"><b>SHODAN</b><code>hostname:example.com</code><span>Search indexed internet-facing service observations for an authorised domain.</span></div>
+<div class="query-card"><b>CENSYS</b><code>names: example.com</code><span>Correlate hosts and certificates using internet-wide datasets.</span></div>
+</div>
+<div class="query-tip">Replace <code>example.com</code> only with a domain you own or have explicit permission to assess. Search syntax and availability vary by provider.</div>
+</section>
+
+<section class="os-panel" id="recon-evidence"><div class="os-panel-head"><span>04 / evidence ledger</span><span>analyst discipline</span></div>
+<div class="evidence-grid">
+<div><b>IDENTITY</b><span>What exact asset or entity does this result describe?</span></div>
+<div><b>SOURCE</b><span>Where did the observation come from? Prefer primary or authoritative sources.</span></div>
+<div><b>TIME</b><span>When was it observed? DNS, certificates and internet indexes change.</span></div>
+<div><b>CORROBORATION</b><span>Can a second independent source confirm the important part?</span></div>
+<div><b>CONFIDENCE</b><span>Separate observed facts from inferred relationships.</span></div>
+<div><b>RELEVANCE</b><span>Does the observation matter to the authorised assessment objective?</span></div>
+</div>
+<div class="evidence-example"><b>Example record</b><code>asset: dev.example.com
+source: Certificate Transparency
+observed: 2026-09-24
+signal: certificate SAN contains dev.example.com
+corroboration: DNS resolution checked separately
+confidence: high
+note: discovery signal, not proof of a live application</code></div>
+</section>
+
+<section class="os-panel" id="recon-learning"><div class="os-panel-head"><span>05 / learning map</span><span>authoritative references</span></div>
+<div class="learning-grid">
+<a href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank" rel="noopener"><b>OWASP WSTG</b><span>Information gathering, attack-surface identification and application entry-point methodology.</span></a>
+<a href="https://projectdiscovery.io/open-source" target="_blank" rel="noopener"><b>ProjectDiscovery</b><span>Subfinder, dnsx, httpx and related open-source attack-surface mapping tools.</span></a>
+<a href="https://urlscan.io/docs/" target="_blank" rel="noopener"><b>urlscan.io</b><span>Historical scans, URL analysis, screenshots, DOM and observed web activity.</span></a>
+<a href="https://crt.sh/" target="_blank" rel="noopener"><b>crt.sh</b><span>Certificate Transparency search for certificate names and related domains.</span></a>
+<a href="https://www.shodan.io/" target="_blank" rel="noopener"><b>Shodan</b><span>Internet-facing service and device observations.</span></a>
+<a href="https://search.censys.io/" target="_blank" rel="noopener"><b>Censys</b><span>Internet asset, host and certificate intelligence.</span></a>
+</div>
+</section>
+
+<section class="recon-hero" id="recon-overview">
+<div class="os-panel"><div class="os-panel-head"><span>ADIGUN reconnaissance intelligence desk</span><span class="live">● passive-first</span></div><div class="os-panel-body">
+<div class="os-kicker">OSINT × ATTACK SURFACE × VERIFICATION</div>
+<h1 class="os-title">Reconnaissance<br><em>Operations</em></h1>
+<p class="os-lead">A structured map for discovering domains, subdomains, certificates, DNS records, people and organisation signals, exposed services, historical URLs and application technology. Start passive, correlate multiple sources, record evidence, then move to authorised active validation.</p>
+<div class="os-actions"><a class="os-btn primary" href="#recon-overview">open ADIGUN CYBER OS →</a><a class="os-btn" href="#recon-workflow">follow workflow</a><a class="os-btn" href="#recon-queries">query lab</a></div>
+</div></div>
+<div class="os-panel"><div class="os-panel-head"><span>analyst model</span><span>00</span></div><div class="os-panel-body recon-console">
+<div><span class="prompt">hb@recon:~$</span> objective</div><div class="value">reduce unknowns</div>
+<div><span class="prompt">hb@recon:~$</span> sequence</div><div>scope → passive → correlate → resolve → inspect → validate</div>
+<div><span class="prompt">hb@recon:~$</span> rule</div><div class="key">one source ≠ truth</div>
+<div><span class="prompt">hb@recon:~$</span> evidence</div><div>source + timestamp + query + result + confidence</div>
+<div><span class="prompt">hb@recon:~$</span> boundary</div><div class="key">authorised targets only</div>
+</div></div>
+</section>
+
+<div class="recon-stats"><div><b>12</b><span>recon domains</span></div><div><b id="toolCount">40+</b><span>mapped tools</span></div><div><b>6</b><span>workflow phases</span></div><div><b>1</b><span>operating rule: verify</span></div></div>
+
+<section class="os-panel" id="recon-workflow"><div class="os-panel-head"><span>01 / reconnaissance workflow</span><span>passive → active</span></div>
+<div class="workflow">
+<div class="flow-card"><i>01</i><b>Scope</b><span>Write the authorised domain, IP range, application or organisation boundary. Record exclusions.</span></div>
+<div class="flow-card"><i>02</i><b>Discover</b><span>Collect public names, certificates, DNS, indexed URLs, historical assets and organisation signals.</span></div>
+<div class="flow-card"><i>03</i><b>Correlate</b><span>Join subdomains, IPs, ASNs, certificates, technologies and historical records. Expect gaps.</span></div>
+<div class="flow-card"><i>04</i><b>Resolve</b><span>Confirm which discovered names currently resolve and identify CNAME, A, AAAA, MX and NS relationships.</span></div>
+<div class="flow-card"><i>05</i><b>Inspect</b><span>For authorised targets, inspect HTTP metadata, technologies, pages, screenshots and application entry points.</span></div>
+<div class="flow-card"><i>06</i><b>Validate</b><span>Manually verify important findings. Preserve source, timestamp and evidence before calling something a finding.</span></div>
+</div>
+<div class="recon-warning"><b>SAFETY BOUNDARY</b> Passive OSINT can still expose personal or sensitive information. Minimise collection, respect terms and privacy, and do not pivot into intrusive testing unless the target and action are explicitly authorised.</div>
+</section>
+
+<section class="os-panel" id="recon-toolkit"><div class="os-panel-head"><span>02 / reconnaissance toolkit</span><span id="toolResultCount">all tools</span></div>
+<div class="resource-controls recon-controls"><label><span>⌕</span><input id="toolSearch" placeholder="Search tools, signals, use cases..."></label><select id="toolCategory"><option value="all">ALL DOMAINS</option></select><button id="toolReset" class="os-mini" type="button">reset</button></div>
+<div id="toolGrid" class="recon-grid"></div>
+</section>
+
+<section class="os-panel" id="recon-queries"><div class="os-panel-head"><span>03 / query lab</span><span>templates, not targets</span></div>
+<div class="query-grid">
+<div class="query-card"><b>SEARCH ENGINE</b><code>site:example.com filetype:pdf</code><span>Locate indexed documents on an authorised domain.</span></div>
+<div class="query-card"><b>SUBDOMAIN</b><code>site:*.example.com</code><span>Use search indexing as one discovery signal, then corroborate with DNS/CT data.</span></div>
+<div class="query-card"><b>CERTIFICATE</b><code>%.example.com</code><span>Use CT portals to inspect certificate names and issuance history.</span></div>
+<div class="query-card"><b>URLSCAN</b><code>domain:example.com</code><span>Search historical public website scans and observed web activity.</span></div>
+<div class="query-card"><b>SHODAN</b><code>hostname:example.com</code><span>Search indexed internet-facing service observations for an authorised domain.</span></div>
+<div class="query-card"><b>CENSYS</b><code>names: example.com</code><span>Correlate hosts and certificates using internet-wide datasets.</span></div>
+</div>
+<div class="query-tip">Replace <code>example.com</code> only with a domain you own or have explicit permission to assess. Search syntax and availability vary by provider.</div>
+</section>
+
+<section class="os-panel" id="recon-evidence"><div class="os-panel-head"><span>04 / evidence ledger</span><span>analyst discipline</span></div>
+<div class="evidence-grid">
+<div><b>IDENTITY</b><span>What exact asset or entity does this result describe?</span></div>
+<div><b>SOURCE</b><span>Where did the observation come from? Prefer primary or authoritative sources.</span></div>
+<div><b>TIME</b><span>When was it observed? DNS, certificates and internet indexes change.</span></div>
+<div><b>CORROBORATION</b><span>Can a second independent source confirm the important part?</span></div>
+<div><b>CONFIDENCE</b><span>Separate observed facts from inferred relationships.</span></div>
+<div><b>RELEVANCE</b><span>Does the observation matter to the authorised assessment objective?</span></div>
+</div>
+<div class="evidence-example"><b>Example record</b><code>asset: dev.example.com
+source: Certificate Transparency
+observed: 2026-09-24
+signal: certificate SAN contains dev.example.com
+corroboration: DNS resolution checked separately
+confidence: high
+note: discovery signal, not proof of a live application</code></div>
+</section>
+
+<section class="os-panel" id="recon-learning"><div class="os-panel-head"><span>05 / learning map</span><span>authoritative references</span></div>
+<div class="learning-grid">
+<a href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank" rel="noopener"><b>OWASP WSTG</b><span>Information gathering, attack-surface identification and application entry-point methodology.</span></a>
+<a href="https://projectdiscovery.io/open-source" target="_blank" rel="noopener"><b>ProjectDiscovery</b><span>Subfinder, dnsx, httpx and related open-source attack-surface mapping tools.</span></a>
+<a href="https://urlscan.io/docs/" target="_blank" rel="noopener"><b>urlscan.io</b><span>Historical scans, URL analysis, screenshots, DOM and observed web activity.</span></a>
+<a href="https://crt.sh/" target="_blank" rel="noopener"><b>crt.sh</b><span>Certificate Transparency search for certificate names and related domains.</span></a>
+<a href="https://www.shodan.io/" target="_blank" rel="noopener"><b>Shodan</b><span>Internet-facing service and device observations.</span></a>
+<a href="https://search.censys.io/" target="_blank" rel="noopener"><b>Censys</b><span>Internet asset, host and certificate intelligence.</span></a>
+</div>
+</section>
+
+<section class="os-panel" id="commands"><div class="os-panel-head"><span>02 / COMMAND CENTER</span><span>WINDOWS · LINUX · POWERSHELL · SOC</span></div><div class="panel-tools"><input id="commandSearch" placeholder="Search command, purpose, detection use..."><select id="commandPlatform"><option value="all">ALL PLATFORMS</option><option>Windows</option><option>PowerShell</option><option>Linux</option></select></div><div id="commandGrid" class="cyber-grid"></div></section><section class="os-panel" id="shortcuts"><div class="os-panel-head"><span>03 / KEYBOARD LAB</span><span>SHORTCUTS · POWER TRICKS</span></div><div class="panel-tools"><input id="shortcutSearch" placeholder="Search shortcut..."><select id="shortcutPlatform"><option value="all">ALL</option><option>Windows</option><option>Linux</option><option>Browser</option><option>VS Code</option><option>Git</option></select></div><div id="shortcutGrid" class="cyber-grid"></div></section><section class="os-panel" id="frameworks"><div class="os-panel-head"><span>04 / FRAMEWORK LIBRARY</span><span>OUTCOMES · CONTROLS · TECHNIQUES</span></div><div class="framework-wheel" id="frameworkWheel"></div><div id="frameworkDetail" class="detail-panel">Select a framework.</div></section><section class="os-panel" id="osint"><div class="os-panel-head"><span>05 / OSINT FRAMEWORK</span><span>SCOPE → COLLECT → VALIDATE → CORRELATE → ANALYZE</span></div><div id="osintFlow" class="flow-grid"></div><div id="osintSources" class="cyber-grid"></div></section><section class="os-panel" id="detection"><div class="os-panel-head"><span>06 / DETECTION COMMAND CENTER</span><span>OBSERVE → DETECT → INVESTIGATE</span></div><div class="detection-layout"><div id="detectionGrid" class="cyber-grid"></div><div class="detail-panel"><h3>Watch → Collect → Detect → Respond → Recover → Learn</h3><p>Use this lifecycle to turn an observation into a controlled incident-response workflow. Every exercise is framed for defensive or explicitly authorised practice.</p><div id="lifecycle" class="lifecycle"></div></div></div></section><section class="os-panel" id="teams"><div class="os-panel-head"><span>07 / PEOPLE, HACKERS & SECURITY TEAMS</span><span>ROLES · MOTIVATION · OUTPUTS</span></div><div id="teamGrid" class="cyber-grid"></div></section><section class="os-panel" id="formulas"><div class="os-panel-head"><span>08 / ENGINEERING FORMULA ENGINE</span><span>CALCULATE · EXPLAIN · APPLY</span></div><div class="formula-layout"><div id="formulaGrid" class="cyber-grid"></div><div class="calculator"><h3>Formula calculator</h3><select id="formulaSelect"></select><div id="formulaInputs"></div><button class="os-btn primary" id="calculateFormula">CALCULATE</button><pre id="formulaResult">Select a formula.</pre></div></div></section><section class="os-panel" id="simulation"><div class="os-panel-head"><span>09 / SOC SIMULATOR</span><span>OBSERVE → DECIDE → EXPLAIN · 1,000,000 UNIQUE CASES</span></div><div id="socSimulator" class="game-area"></div></section><section class="os-panel" id="games"><div class="os-panel-head"><span>09 / CYBER GAMES</span><span>THINK · INVESTIGATE · DECIDE</span></div><div id="gameArea" class="game-area"></div></section><section class="os-panel" id="subnet"><div class="os-panel-head"><span>10 / NETWORK CALCULATOR</span><span>CIDR → NETWORK → HOST RANGE</span></div><div class="calculator subnet-calculator"><label>CIDR<input id="cidrInput" placeholder="192.168.1.0/24"></label><button class="os-btn primary" id="cidrCalc">CALCULATE</button><pre id="cidrResult">Enter a CIDR prefix.</pre></div></section><section class="os-panel" id="labs"><div class="os-panel-head"><span>10 / PRACTICAL LABS</span><span>SAFE · CONTROLLED · EXPLAINED</span></div><div id="labGrid" class="cyber-grid"></div></section><section class="os-panel" id="glossary"><div class="os-panel-head"><span>11 / CYBER GLOSSARY</span><span>SEARCH EVERYTHING</span></div><div class="panel-tools"><input id="glossarySearch" placeholder="Search a cybersecurity term..."></div><div id="glossaryGrid" class="cyber-grid"></div></section><section class="os-panel" id="graph"><div class="os-panel-head"><span>11 / KNOWLEDGE GRAPH</span><span>CONNECTED CONCEPTS</span></div><div id="graphView" class="detail-panel"></div><div id="sourceRegistry" class="cyber-grid"></div></section><section class="os-panel" id="learning"><div class="detail-panel" id="progressPanel">LEARNING PROGRESS: READY</div><div class="os-panel-head"><span>12 / MY LEARNING PATH</span><span>PROGRESSIVE SKILL BUILDING</span></div><div id="learningPath" class="learning-path"></div></section><footer class="os-footer">ADIGUN CYBER OS · STRUCTURED KNOWLEDGE · AUTHORISED SECURITY LEARNING · 2026</footer></div></main></div><script src="/cyber-os/cyber-os-data.js?v=20260930-2"></script><script src="/cyber-os/encyclopedia-data.js?v=20261001-3"></script><script src="/cyber-os/encyclopedia-engine.js?v=20261009-1"></script><script src="/cyber-os/knowledge-records.js?v=20261001-1"></script><script src="/cyber-os/knowledge-hub.js?v=20260930-1"></script><script src="/cyber-os/cyber-os-graph.js?v=20260930-1"></script><script src="/cyber-os/source-registry.js?v=20261001-2"></script><script src="/cyber-os/cyber-os.js?v=20261009-1"></script><script src="/js/adigun-renderer.js?v=20260926-1"></script><script src="/js/adigun-memory.js?v=20261007-1"></script><script src="/js/adigun-agent.js?v=20260926-1"></script><script src="/js/hb-bot-chat.js?v=20261010-1"></script><script src="/js/adigun-command-engine.js?v=20260930-3"></script><script src="/js/adigun-admin.js?v=20261001-1"></script><script src="/js/adigun-private-operator.js?v=20260930-3"></script><script src="/js/adigun-terminal-controller-v2.js?v=20261001-1"></script><script src="/js/ai-lab.js?v=20261004-1"></script><script src="/js/recon-hub.js?v=20261004-1"></script><script src="/cyber-os/networking-academy.js?v=20261003-1"></script><script src="/cyber-os/catalog-loader.js?v=20261009-1"></script><script src="/cyber-os/cybersecurity-tools-academy.js?v=20261009-5"></script><script src="/cyber-os/knowledge-graph-engine.js?v=20261001-1"></script><script src="/cyber-os/knowledge-engine.js?v=20261001-2"></script><script src="/cyber-os/knowledge-games.js?v=20261001-2"></script><script src="/cyber-os/knowledge-games-ui.js?v=20261001-2"></script><script src="/cyber-os/scale-status.js?v=20260930-1"></script><script src="/cyber-os/learning-engine.js?v=20260930-1"></script><script src="/cyber-os/soc-simulator.js?v=20261001-2"></script><script src="/js/language-system.js?v=20261024-1"></script>
+<script src="/js/progressive-disclosure.js?v=20261009-2"></script>
+<script src="/js/adigun-sidebar.js?v=20261010-1"></script>
+</body></html>

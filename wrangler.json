@@ -1,0 +1,88 @@
+{
+  "name": "adigun-control",
+  "account_id": "4ba25f0c9e0b7bf55d54d129acd63251",
+  "main": "backend/workers/worker-admin.mjs",
+  "compatibility_date": "2026-09-25",
+  "assets": {
+    "directory": "dist-admin",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "html_handling": "none",
+    "not_found_handling": "none"
+  },
+  "ai": {
+    "binding": "AI"
+  },
+  "ai_search_namespaces": [
+    {
+      "binding": "AI_SEARCH",
+      "namespace": "default",
+      "remote": true
+    }
+  ],
+  "ratelimits": [
+    {
+      "name": "API_LIMITER",
+      "namespace_id": "9001",
+      "simple": {
+        "limit": 30,
+        "period": 60
+      }
+    },
+    {
+      "name": "ADMIN_AI_LIMITER",
+      "namespace_id": "9002",
+      "simple": {
+        "limit": 120,
+        "period": 60
+      }
+    }
+  ],
+  "routes": [],
+  "secrets": {
+    "required": [
+      "OPENAI_API_KEY",
+      "ADIGUN_ADMIN_EMAIL",
+      "ADIGUN_ACCESS_TEAM_DOMAIN",
+      "ADIGUN_ACCESS_AUD",
+      "GITHUB_TOKEN"
+    ]
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "containers": [
+    {
+      "class_name": "Sandbox",
+      "name": "adigun-private-sandbox-v1",
+      "scheduling_policy": "durable_object",
+      "images": {
+        "sandbox": {
+          "dockerfile": "./Dockerfile"
+        }
+      }
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "Sandbox",
+        "name": "Sandbox"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "new_sqlite_classes": [
+        "Sandbox"
+      ],
+      "tag": "adigun-sandbox-v1"
+    }
+  ],
+  "vars": {
+    "SANDBOX_LOG_LEVEL": "info",
+    "SANDBOX_LOG_FORMAT": "json"
+  },
+  "workers_dev": false,
+  "preview_urls": false
+}

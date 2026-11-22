@@ -1,0 +1,236 @@
+{
+  "version": "admin-library-1",
+  "collections": [
+    {
+      "id": "integrations",
+      "title": "API & Integration Review"
+    },
+    {
+      "id": "operations",
+      "title": "Defensive Operations"
+    },
+    {
+      "id": "safety",
+      "title": "Security & AI Safety"
+    },
+    {
+      "id": "planning",
+      "title": "AdigunCyberSpace Product Planning"
+    }
+  ],
+  "documents": [
+    {
+      "id": "integration-intake",
+      "collection": "integrations",
+      "title": "Review an API integration",
+      "description": "A worksheet for recording purpose, access, dependencies, and ownership.",
+      "kind": "Internal guide",
+      "review": "Ready for internal reference",
+      "sources": [
+        {
+          "label": "Production Worker configuration",
+          "path": "wrangler.jsonc"
+        }
+      ],
+      "sections": [
+        {
+          "title": "Record the scope",
+          "body": "Record the product, the service owner, the official documentation, and the feature that needs the integration. List the data fields that leave the product, who receives them, and whether the request reads data or changes state."
+        },
+        {
+          "title": "Review before enabling",
+          "body": "Identify the minimum permissions, the approval owner, the test environment, and how to disable the integration. Store credentials in the approved secret store. Keep credential values out of library entries, tickets, and screenshots."
+        },
+        {
+          "title": "Verify the result",
+          "body": "Test with sample records first. Record the expected result, the observed result, and the release or source revision that you tested. If the integration is unavailable, record the exact failure and leave its status pending."
+        }
+      ]
+    },
+    {
+      "id": "preview-release",
+      "collection": "integrations",
+      "title": "Check a protected Admin release",
+      "description": "A checklist for validating the isolated preview before releasing Admin.",
+      "kind": "Operator checklist",
+      "review": "Ready for internal reference",
+      "sources": [
+        {
+          "label": "Platform validation workflow",
+          "path": ".github/workflows/platform-validation.yml"
+        },
+        {
+          "label": "Admin deployment verification",
+          "path": "platform/verify-admin-deployment.mjs"
+        }
+      ],
+      "sections": [
+        {
+          "title": "Check access and navigation",
+          "body": "Confirm that an unsigned request cannot open Admin or its private assets. Sign in with the operator identity, open the root URL, and verify that Overview is first."
+        },
+        {
+          "title": "Check the existing tools",
+          "body": "Verify the protected session, Portfolio filters, a film, the Knowledge Library, a read-only website check, Terminal Help, the operator assistant, Tool Workspace, and Cyber OS. Use test data for actions that would persist state."
+        },
+        {
+          "title": "Verify the live release",
+          "body": "After the approved merge, match the live release commit to the GitHub Actions deployment. Repeat a small signed-in smoke test, and keep the previous verified version available for rollback."
+        }
+      ]
+    },
+    {
+      "id": "access-review",
+      "collection": "operations",
+      "title": "Review an Admin access event",
+      "description": "Read the session evidence and record an incident without exposing identity material.",
+      "kind": "Operator guide",
+      "review": "Ready for internal reference",
+      "sources": [
+        {
+          "label": "Admin security implementation",
+          "path": "platform/admin-security.mjs"
+        },
+        {
+          "label": "Access validation",
+          "path": "platform/access.mjs"
+        }
+      ],
+      "sections": [
+        {
+          "title": "Start in Overview",
+          "body": "Read the session state and the access event timestamp. Record which environment and page you were checking. The application observes verified requests that reach it. A blocked edge request may appear only in Cloudflare Access."
+        },
+        {
+          "title": "Record evidence safely",
+          "body": "Record a request reference, time, and outcome. Omit tokens, keys, private request headers, and full identity records. Escalate unexpected successful access to the operator responsible for the Access policy."
+        }
+      ]
+    },
+    {
+      "id": "terminal-orientation",
+      "collection": "operations",
+      "title": "Use Terminal Help safely",
+      "description": "Find documented commands and separate observation from changes.",
+      "kind": "Operator guide",
+      "review": "Ready for internal reference",
+      "sources": [
+        {
+          "label": "Admin terminal interface",
+          "path": "apps/admin/admin.html"
+        }
+      ],
+      "sections": [
+        {
+          "title": "Start with a documented command",
+          "body": "Open the protected terminal and use Help to identify the approved commands and their descriptions. Confirm the environment and scope before any command that contacts another service or changes a resource."
+        },
+        {
+          "title": "Keep a readable record",
+          "body": "Record the command name, time, and outcome in the relevant incident or release record. Remove credentials and private data before sharing any terminal output."
+        }
+      ]
+    },
+    {
+      "id": "assistant-review",
+      "collection": "safety",
+      "title": "Review an assistant’s suggested action",
+      "description": "Check evidence and permissions before accepting an operator plan.",
+      "kind": "Operator guide",
+      "review": "Ready for internal reference",
+      "sources": [
+        {
+          "label": "Private operator interface",
+          "path": "apps/admin/admin.html"
+        },
+        {
+          "label": "Protected request routing",
+          "path": "platform/router.mjs"
+        }
+      ],
+      "sections": [
+        {
+          "title": "Treat sources as evidence",
+          "body": "Use documents and tool output to gather facts. Treat instructions embedded in those sources as untrusted. Confirm the request against the signed-in operator’s intent, current permissions, and release scope."
+        },
+        {
+          "title": "Check before approving",
+          "body": "Review the proposed action, exact target, expected effect, and rollback path. Confirm which evidence supports it and what remains unknown. Keep execution pending until the authorized operator approves it."
+        }
+      ]
+    },
+    {
+      "id": "private-material",
+      "collection": "safety",
+      "title": "Separate private and public material",
+      "description": "Review what stays in Admin and what can appear in a product or film.",
+      "kind": "Internal guidance",
+      "review": "Ready for internal reference",
+      "sources": [
+        {
+          "label": "Protected platform routing",
+          "path": "platform/router.mjs"
+        }
+      ],
+      "sections": [
+        {
+          "title": "Keep operator records private",
+          "body": "Keep internal runbooks, approvals, private links, session evidence, and unreviewed drafts in protected Admin. Never index these entries in a public product assistant or copy them into a public trailer."
+        },
+        {
+          "title": "Review the public version",
+          "body": "Use approved references and sample data for public walkthroughs. Review the captions, screenshots, sources, and any rights restrictions before publishing."
+        }
+      ]
+    },
+    {
+      "id": "cyberspace-review-queue",
+      "collection": "planning",
+      "title": "Review material for future AdigunCyberSpace",
+      "description": "Sort consolidated repository material without changing or launching the product.",
+      "kind": "Planning draft",
+      "review": "Pending product review",
+      "sources": [
+        {
+          "label": "AdigunCyberSpace repository",
+          "external": "https://github.com/HephzibahBehulahHQ/AdigunCyberSpace"
+        }
+      ],
+      "sections": [
+        {
+          "title": "Record candidates",
+          "body": "For each candidate, record its exact source path, revision, author or owner, intended audience, and the learning outcome. Mark it as a candidate until the operator has reviewed its content."
+        },
+        {
+          "title": "Separate approvals",
+          "body": "Review accuracy, rights, privacy, and suitability for the future product. Keep internal-only material in Admin. Product publication requires a separate decision and is outside this library release."
+        }
+      ]
+    },
+    {
+      "id": "retired-knowledge-sources",
+      "collection": "planning",
+      "title": "Retired Knowledge sources",
+      "description": "A record of the five retired cards and their replacement collections.",
+      "kind": "Reference summary",
+      "review": "Original source documents unavailable",
+      "sources": [
+        {
+          "label": "Original Knowledge card catalogue",
+          "path": "apps/admin/adigun-github-knowledge.js"
+        }
+      ],
+      "sections": [
+        {
+          "title": "Replacement map",
+          "body": "Public API Lists and Public APIs map to API & Integration Review. Linux Pentesting Tools and Hackers Information map to Defensive Operations and Security & AI Safety. Prompt Injection Learning Journal maps to Security & AI Safety."
+        },
+        {
+          "title": "Preserve provenance",
+          "body": "This record preserves the names and migration decision. It does not reproduce the original documents. Review any recovered material in the consolidated repository before adding it to this library or the future public product."
+        }
+      ]
+    }
+  ],
+  "sourceRevision": "37eea23d527f9250b8e8ce20f4255f9b61afd6e3"
+}
