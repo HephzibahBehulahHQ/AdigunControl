@@ -5,7 +5,7 @@ import {adminSecurity,privateHeaders} from './admin-security.mjs';
 const ROOT='hephzibahbehulah.com';
 const ADMIN='admin.'+ROOT;
 const PUBLIC=new Map([['engineering.'+ROOT,'engineering'],['cyber.'+ROOT,'cyber']]);
-const PRIVATE=new Set([ADMIN]);
+const PRIVATE=new Set([ADMIN, "admin-preview."+ROOT]);
 const WORKERS_DEV='hephzibahbehulah-github-io.hephzibah-behulah.workers.dev';
 const MAIN=new Set([ROOT,'www.'+ROOT]);
 const reply=(status,message)=>new Response(message,{status,headers:{'content-type':'text/plain; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'}});
@@ -88,7 +88,7 @@ export function createPlatform({legacy,verifyAdmin,cyberAI,accountAdmin,memberAu
       // Asset HTML handling is disabled so application mounts keep their own
       // routing. Explicitly resolve the original main-domain landing file.
       let legacyRequest=request;
-      if(url.hostname!==ADMIN&&url.pathname==='/'&&['GET','HEAD'].includes(request.method)){
+      if(!route.privateHost&&url.pathname==='/'&&['GET','HEAD'].includes(request.method)){
         const landing=new URL(request.url);landing.pathname='/index.html';
         legacyRequest=new Request(landing,request);
       }
@@ -116,7 +116,7 @@ export function createPlatform({legacy,verifyAdmin,cyberAI,accountAdmin,memberAu
     return result;
   }};
   return {async fetch(request,env,ctx){
-    const privateHost=new URL(request.url).hostname===ADMIN;
+    const privateHost=PRIVATE.has(new URL(request.url).hostname);
     const id=privateHost?crypto.randomUUID():null;
     try{const response=await handler.fetch(request,env,ctx);return privateHost?privateHeaders(response,id):response;}
     catch(error){if(!privateHost)throw error;console.error('HB_ADMIN_REQUEST_FAILED',{requestId:id});return privateHeaders(reply(503,'Private service unavailable. Reference '+id),id);}

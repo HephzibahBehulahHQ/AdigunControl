@@ -5,7 +5,8 @@ export {Sandbox};
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    if (url.hostname !== 'admin.hephzibahbehulah.com') {
+    const host = env.ADIGUN_ADMIN_HOST || 'admin.hephzibahbehulah.com';
+    if (url.hostname !== host) {
       return new Response('Not found', {
         status: 404,
         headers: {'cache-control': 'no-store', 'x-robots-tag': 'noindex'},

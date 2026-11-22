@@ -1,5 +1,5 @@
 {
-  "name": "adigun-control",
+  "name": "adigun-control-preview",
   "account_id": "4ba25f0c9e0b7bf55d54d129acd63251",
   "main": "backend/workers/worker-admin.mjs",
   "compatibility_date": "2026-09-25",
@@ -81,7 +81,8 @@
   ],
   "vars": {
     "SANDBOX_LOG_LEVEL": "info",
-    "SANDBOX_LOG_FORMAT": "json"
+    "SANDBOX_LOG_FORMAT": "json",
+    "ADIGUN_ADMIN_HOST": "admin-preview.hephzibahbehulah.com"
   },
   "workers_dev": false,
   "preview_urls": false

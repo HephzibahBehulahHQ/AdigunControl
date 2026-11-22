@@ -1,4 +1,4 @@
-import legacy, {Sandbox} from './worker-public-v2.js';
+import legacy, {Sandbox} from './worker-openai.js';
 import {verifyCloudflareAccessJwt} from '../../platform/access.mjs';
 import {createPlatform} from '../../platform/router.mjs';
 import cyberAI from '../../platform/cyber-ai.mjs';
