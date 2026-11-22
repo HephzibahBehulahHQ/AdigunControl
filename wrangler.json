@@ -54,7 +54,7 @@
   "containers": [
     {
       "class_name": "Sandbox",
-      "name": "adigun-private-sandbox-v1",
+      "name": "adigun-control-preview-sandbox",
       "scheduling_policy": "durable_object",
       "images": {
         "sandbox": {
