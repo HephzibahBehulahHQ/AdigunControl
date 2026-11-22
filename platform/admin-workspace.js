@@ -45,7 +45,7 @@
     switcher.after(homeLink);
   }
   sidebar.querySelectorAll('.hb-platform-apps').forEach(group => group.remove());
-  const footer = document.querySelector('.hb-platform-footer');
+  const footer = document.querySelector('.hb-platform-footer, footer.os-footer');
   if (footer) {
     const external = sidebar.querySelector('[data-nav-group="external"] nav');
     const blog = footer.querySelector('a[href*="blogspot.com"]');
