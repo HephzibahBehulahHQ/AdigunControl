@@ -18,9 +18,9 @@ header.append(brand,nav);const sidebar=document.querySelector('.os-sidebar');if(
 top.append(accountMenu);
 const links=document.createElement('details');
 links.className='hb-sidebar-group hb-admin-management';
-links.append(make('summary','Administration'),action(({en:'AdigunSPs admin',de:'AdigunSPs-Verwaltung',yo:'Ị̀ṣàkóso AdigunSPs',pcm:'AdigunSPs admin'})[document.documentElement.lang]||'AdigunSPs admin',()=>import('/_hb/adigunsps-admin-ui.js').then(m=>m.openAdigunSPsAdmin()).catch(()=>alert('AdigunSPs admin unavailable.'))),action('Security & releases',()=>import('/_hb/admin-security-ui.js').then(m=>m.openSecurity()).catch(()=>alert('Security panel unavailable. Refresh your private sign-in.'))),action('Users & sign-ins',()=>import('/_hb/admin-accounts-ui.js').then(m=>m.openAccounts()).catch(()=>alert('Account monitor unavailable.'))));
-links.children[2].dataset.hbSecurity='true';
-links.children[3].dataset.hbMonitor='true';
+links.append(make('summary','Administration'),action('Security & releases',()=>import('/_hb/admin-security-ui.js').then(m=>m.openSecurity()).catch(()=>alert('Security panel unavailable. Refresh your private sign-in.'))),action('Users & sign-ins',()=>import('/_hb/admin-accounts-ui.js').then(m=>m.openAccounts()).catch(()=>alert('Account monitor unavailable.'))));
+links.children[1].dataset.hbSecurity='true';
+links.children[2].dataset.hbMonitor='true';
 sidebar.querySelector('.hb-platform-apps')?.after(links);
 import('/_hb/admin-security-ui.js').then(m=>m.watchSession(accountMenu)).catch(()=>{});
 import('/_hb/admin-workspace.js');}}else if(sidebar){const section=make('nav');section.className='os-nav';section.setAttribute('aria-label','Learning applications');section.append(...nav.children);const framework=sidebar.querySelector('nav');framework?.after(section);}else document.body.prepend(header);

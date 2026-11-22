@@ -40,7 +40,10 @@ test('four-language panel copy and product separation stay intact',()=>{
  const client=fs.readFileSync(new URL('./adigunsps-admin-client.mjs',import.meta.url),'utf8');
  assert.doesNotMatch(client,/vnckoocsookbaqalybje|service_role|localStorage|sessionStorage|\/api\/admin\/accounts/);
  const build=fs.readFileSync(new URL('./build.mjs',import.meta.url),'utf8');assert.ok(build.includes('adigunsps-admin-client.mjs'));
- const platform=fs.readFileSync(new URL('./platform.js',import.meta.url),'utf8');assert.ok(platform.includes("import('/_hb/adigunsps-admin-ui.js')"));
+ const platform=fs.readFileSync(new URL('./platform.js',import.meta.url),'utf8');assert.doesNotMatch(platform,/adigunsps-admin-ui/);
+ const portfolio=fs.readFileSync(new URL('../apps/admin/_hb/admin-cinema/portfolio.js',import.meta.url),'utf8');
+ assert.ok(portfolio.includes("selected?.name.toLowerCase() === 'adigunsps'"));
+ assert.ok(portfolio.includes("import('/_hb/adigunsps-admin-ui.js')"));
 });
 
 test('verified Admin endpoint waits for an email code and uses only the returned product session',async()=>{

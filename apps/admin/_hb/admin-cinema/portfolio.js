@@ -63,6 +63,24 @@
       link.textContent = 'Open product workspace';
       record.append(link);
     }
+    if (selected?.name.toLowerCase() === 'adigunsps') {
+      const review = document.createElement('button');
+      review.type = 'button';
+      review.className = 'os-btn';
+      review.textContent = 'Review AdigunSPs recipes';
+      review.addEventListener('click', async () => {
+        try {
+          const {openAdigunSPsAdmin} = await import('/_hb/adigunsps-admin-ui.js');
+          openAdigunSPsAdmin();
+        } catch {
+          const status = document.createElement('p');
+          status.setAttribute('role', 'status');
+          status.textContent = 'Recipe review is currently unavailable.';
+          review.replaceWith(status);
+        }
+      });
+      record.append(review);
+    }
     active?.destroy();
     active = null;
     if (!details.open || location.hash !== '#portfolio') return;

@@ -176,3 +176,17 @@ body.hb-unified.hb-admin-workspace .os-main .os-content section[hidden]{display:
   .hb-admin-workspace .mega-tool-card{min-width:0}
   .hb-unified.hb-admin-workspace .os-top .hb-search-dropdown{inset-inline:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box}
 }
+
+.hb-unified.hb-admin-workspace :is(#megaTools,#security-calculators) .resource-controls {
+  display:grid;grid-template-columns:minmax(12rem,2fr) repeat(3,minmax(7rem,1fr)) auto;
+}
+.hb-unified.hb-admin-workspace :is(#megaTools,#security-calculators) .resource-controls>label {
+  grid-column:auto;min-width:0;width:100%;
+}
+.hb-unified.hb-admin-workspace #megaToolGrid {max-height:none!important;overflow:visible!important}
+@media(max-width:1050px){
+  .hb-unified.hb-admin-workspace :is(#megaTools,#security-calculators) .resource-controls {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .hb-unified.hb-admin-workspace :is(#megaTools,#security-calculators) .resource-controls>label{grid-column:1/-1}
+}
