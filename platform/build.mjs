@@ -14,13 +14,7 @@ copy('cyber-os', 'cyber-os');
 copy('apps/cyber-os', 'cyber-os');
 copySharedAssets(root, destination);
 
-if (process.env.HB_ADIGUNSPS_ACCOUNT_VERIFIED === 'true') {
-  const file = path.join(destination, 'admin.html');
-  const html = fs.readFileSync(file, 'utf8');
-  if (!/<\/head>/i.test(html)) throw new Error('Missing Admin HTML head.');
-  fs.writeFileSync(file, html.replace(/<\/head>/i, '<meta name="hb-adigunsps-account" content="verified"></head>'));
-}
-for (const file of ['platform.js', 'admin-workspace.js', 'platform.css', 'experience.js', 'experience.css', 'admin-security-ui.js', 'admin-accounts-ui.js', 'adigunsps-admin-ui.js', 'adigunsps-admin-client.mjs']) {
+for (const file of ['platform.js', 'admin-workspace.js', 'platform.css', 'experience.js', 'experience.css', 'admin-security-ui.js', 'admin-accounts-ui.js']) {
   copy('platform/' + file, '_hb/' + file);
 }
 for (const file of ['hb-logo.svg', 'hephzibah-behulah-official.jpg']) copy('packages/shared-ui/assets/' + file, '_hb/' + file);
