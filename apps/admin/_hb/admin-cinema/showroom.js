@@ -42,24 +42,50 @@
   const describe = name => hooks[name]?.[languageIndex()] || name;
   let soundEnabled = false;
   const activePlayers = new Set();
-  const soundControls = new Set();
+  const soundControls = new Map();
+
+
+  const iconPaths = {
+    play:'M8 5v14l11-7z', pause:'M9 5v14M15 5v14',
+    previous:'M6 5v14M18 5l-10 7 10 7z', next:'M18 5v14M6 5l10 7-10 7z',
+    muted:'M4 9h4l5-4v14l-5-4H4zM16 10l4 4m0-4-4 4',
+    sound:'M4 9h4l5-4v14l-5-4H4zM16 9a4 4 0 0 1 0 6m3-8a7 7 0 0 1 0 10',
+    expand:'M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5',
+    shrink:'M4 9h5V4m6 0v5h5M9 20v-5H4m16 0h-5v5',
+    walkthrough:'M4 5h16v14H4zM10 9l5 3-5 3z',
+    trailer:'M4 5h16v14H4zM9 9h6m-6 3h6m-6 3h6',
+    quality:'M3 5h18v14H3zM6 9v3h4m-1-3v6m4-6v6m4-6-4 3 4 3'
+  };
+  function setIcon(button, name, title) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    const path = document.createElementNS(svg.namespaceURI, 'path');
+    path.setAttribute('d', iconPaths[name]);
+    svg.append(path);
+    button.classList.add('showroom-icon');
+    button.title = title;
+    button.replaceChildren(svg);
+  }
 
   function syncSound() {
     const owner = soundEnabled ? [...activePlayers].at(-1) : null;
     for (const player of activePlayers) player.muted = player !== owner;
-    for (const button of soundControls) {
-      button.textContent = soundEnabled ? 'Sound off' : 'Sound on';
-      button.setAttribute('aria-pressed', String(soundEnabled));
+    for (const [button, player] of soundControls) {
+      const audible = player === owner;
+      setIcon(button, audible ? 'sound' : 'muted', audible ? 'Mute' : 'Unmute');
+      button.setAttribute('aria-pressed', String(audible));
     }
     document.dispatchEvent(new CustomEvent('hb:showroom-sound', {detail:soundEnabled}));
   }
 
   function mount(root, names, { active = true, onExplore, walkthrough = false, manualSelection = false } = {}) {
     let index = 0;
-    let shouldPlay = true;
+    let shouldPlay = !window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     let isActive = active;
     let extended = false;
     let highResolution = false;
+    let inViewport = true;
     const video = document.createElement('video');
     video.className = 'showroom-video';
     video.muted = true;
@@ -78,6 +104,7 @@
       const control = document.createElement('button');
       control.type = 'button';
       control.textContent = text;
+      control.title = label;
       control.setAttribute('aria-label', label);
       control.addEventListener('click', onClick);
       return control;
@@ -85,13 +112,15 @@
 
     const previous = button('‹', 'Previous spot', () => select(index - 1, true));
     const next = button('›', 'Next spot', () => select(index + 1, true));
+    setIcon(previous, 'previous', 'Previous spot');
+    setIcon(next, 'next', 'Next spot');
     const toggle = button('Play', 'Play showroom', () => {
       shouldPlay = video.paused;
       syncPlayback();
     });
     const explore = onExplore && button('Explore product', 'Explore product', () => onExplore(names[index]));
     const sound = button('Sound on', 'Showroom sound', () => {
-      soundEnabled = !soundEnabled;
+      soundEnabled = video.muted;
       if (soundEnabled && video.autoplay) {
         activePlayers.delete(video);
         activePlayers.add(video);
@@ -99,10 +128,13 @@
       syncSound();
       if (video.autoplay) video.play().catch(() => { video.muted = true; });
     });
-    soundControls.add(sound);
+    soundControls.set(sound, video);
+    setIcon(sound, 'muted', 'Unmute');
     const demo = walkthrough && !previews.has(names[0]) && button('Watch walkthrough', 'Watch walkthrough', () => {
       extended = !extended;
-      demo.textContent = extended ? 'Back to trailer' : 'Watch walkthrough';
+      const label = extended ? 'Back to trailer' : 'Watch walkthrough';
+      setIcon(demo, extended ? 'trailer' : 'walkthrough', label);
+      demo.setAttribute('aria-label', label);
       demo.setAttribute('aria-pressed', String(extended));
       if (quality) quality.hidden = !extended;
       shouldPlay = true;
@@ -110,16 +142,44 @@
     });
     const quality = demo && ultraHD.has(names[0]) && button('Watch in 4K', 'Change walkthrough quality', () => {
       highResolution = !highResolution;
-      quality.textContent = highResolution ? 'Use HD' : 'Watch in 4K';
+      setIcon(quality, 'quality', highResolution ? 'Switch to HD' : 'Watch in 4K');
       quality.setAttribute('aria-pressed', String(highResolution));
       select(index);
     });
     if (names.length > 1 && !manualSelection) controls.append(previous);
     controls.append(toggle);
     if (names.length > 1 && !manualSelection) controls.append(next);
-    controls.append(sound);
-    if (demo) controls.append(demo);
+    const elapsed = document.createElement('span');
+    elapsed.className = 'showroom-time';
+    elapsed.hidden = true;
+    const seek = document.createElement('input');
+    seek.type = 'range';
+    seek.className = 'showroom-progress';
+    seek.min = '0';
+    seek.step = '0.1';
+    seek.value = '0';
+    seek.hidden = true;
+    seek.setAttribute('aria-label', 'Seek video');
+    function updateProgress() {
+      const ready = Number.isFinite(video.duration) && video.duration > 0;
+      seek.hidden = !ready;
+      elapsed.hidden = !ready || !extended;
+      if (ready) {
+        seek.max = String(video.duration);
+        seek.value = String(video.currentTime);
+        const whole = Math.floor(video.currentTime);
+        elapsed.textContent = Math.floor(whole / 60) + ':' + String(whole % 60).padStart(2, '0');
+      }
+    }
+    seek.addEventListener('input', () => { video.currentTime = Number(seek.value); });
+    for (const event of ['durationchange','timeupdate','emptied']) video.addEventListener(event, updateProgress);
+    controls.append(seek, elapsed, sound);
+    if (demo) {
+      setIcon(demo, 'walkthrough', 'Watch walkthrough');
+      controls.append(demo);
+    }
     if (quality) {
+      setIcon(quality, 'quality', 'Watch in 4K');
       quality.hidden = true;
       quality.setAttribute('aria-pressed', 'false');
       controls.append(quality);
@@ -150,8 +210,10 @@
       }
     });
     const updateFullscreen = () => {
-      if (fullscreen) fullscreen.textContent = document.fullscreenElement === root || root.matches(':popover-open')
-        ? 'Exit full screen' : 'Full screen';
+      if (!fullscreen) return;
+      const expanded = document.fullscreenElement === root || root.matches(':popover-open');
+      setIcon(fullscreen, expanded ? 'shrink' : 'expand', expanded ? 'Exit full screen' : 'Full screen');
+      fullscreen.setAttribute('aria-pressed', String(expanded));
     };
     const onTheaterKey = event => {
       if (event.key === 'Escape' && root.matches(':popover-open')) {
@@ -161,6 +223,7 @@
       }
     };
     if (fullscreen) {
+      updateFullscreen();
       controls.append(fullscreen);
       root.addEventListener('fullscreenchange', updateFullscreen);
       root.addEventListener('keydown', onTheaterKey);
@@ -172,12 +235,12 @@
 
     function updateToggle() {
       const label = video.paused ? 'Play' : 'Pause';
-      toggle.textContent = label;
+      setIcon(toggle, video.paused ? 'play' : 'pause', label);
       toggle.setAttribute('aria-label', label + ' showroom');
     }
 
     function syncPlayback() {
-      video.autoplay = shouldPlay && isActive && !document.hidden;
+      video.autoplay = shouldPlay && isActive && inViewport && !document.hidden;
       if (video.autoplay) {
         activePlayers.add(video);
         syncSound();
@@ -232,6 +295,11 @@
       status.textContent = 'Video unavailable. The spot artwork is displayed.';
       updateToggle();
     });
+    const visibility = typeof IntersectionObserver === "function" ? new IntersectionObserver(entries => {
+      inViewport = entries.at(-1).isIntersecting;
+      syncPlayback();
+    }) : null;
+    visibility?.observe(root);
     select(0);
 
     return {
@@ -254,6 +322,7 @@
         isActive = false;
         syncPlayback();
         localize.disconnect();
+        visibility?.disconnect();
         root.removeEventListener('fullscreenchange', updateFullscreen);
         root.removeEventListener('keydown', onTheaterKey);
         closeTheater();
