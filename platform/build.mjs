@@ -10,6 +10,7 @@ if (fs.existsSync(destination)) throw new Error('dist-admin already exists. Move
 fs.mkdirSync(destination);
 const copy = (from, to) => fs.cpSync(path.join(root, from), path.join(destination, to), {recursive: true});
 copy('apps/admin', '.');
+copy('cyber-os', 'cyber-os');
 copy('apps/cyber-os', 'cyber-os');
 copySharedAssets(root, destination);
 
@@ -29,3 +30,16 @@ copy('packages/shared-data/data/translations', '_hb/data/translations');
 for (const file of ['source-library.json', 'ai-platform.json']) copy('packages/shared-data/data/' + file, 'data/' + file);
 const commitHash = process.env.GITHUB_SHA || execFileSync('git', ['rev-parse', 'HEAD'], {cwd: root, encoding: 'utf8'}).trim();
 fs.writeFileSync(path.join(destination, '_hb/status-build.json'), JSON.stringify({commitHash, buildTimestamp: new Date().toISOString()}));
+
+
+for (const entry of ['admin.html', 'admin-tools.html', 'cyber-os/index.html']) {
+  const html = fs.readFileSync(path.join(destination, entry), 'utf8');
+  const base = new URL(entry, 'https://admin.invalid/');
+  for (const [, reference] of html.matchAll(/<(?:script|link|img|video|source)[^>]*?(?:src|href)="([^"]+)"/gi)) {
+    const url = new URL(reference, base);
+    if (url.origin !== base.origin) continue;
+    if (!fs.statSync(path.join(destination, decodeURIComponent(url.pathname)), {throwIfNoEntry: false})?.isFile()) {
+      throw new Error(entry + ' references missing asset ' + url.pathname);
+    }
+  }
+}

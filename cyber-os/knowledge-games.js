@@ -1,0 +1,8 @@
+(()=>{"use strict";
+const G=window.CYBER_GRAPH_ENGINE,used=new Set;let n=0;
+const PH=["identify","validate","correlate","investigate","explain"],ACT=["inspect the process tree","check the service owner","compare with expected configuration","correlate endpoint and network telemetry","review recent changes","validate the account context","inspect the file path and signer","check the relevant protocol and port","compare against known-good activity","preserve evidence before containment"],OUT=["before making a containment decision","before treating the signal as malicious","before changing the system","before escalating the case","before closing the alert"];
+const esc=s=>String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+function pool(){return G?G.records().filter(x=>x.name):[]}
+function makeGame(q){const r=pool().filter(x=>x.name.toLowerCase().includes(String(q||"").toLowerCase())||!q);if(!r.length)return null;if(used.size>=1000000){used.clear();n=0}const id=n++;used.add(id);const x=r[id%r.length],phase=PH[Math.floor(id/Math.max(1,r.length))%5],action=ACT[Math.floor(id/100)%10],out=OUT[Math.floor(id/1000)%5],answer="Use the "+x.name+" knowledge record to "+action+" "+out+".";return{id,title:"Scenario "+(id+1).toLocaleString()+": "+x.name,question:"A "+x.name+" signal appears during the "+phase+" phase. What should the analyst do next?",options:[answer,"Delete the evidence and restart the host","Assume the alert is harmless because the tool is legitimate"],answer:0,explain:answer+" The scenario is generated from the connected Cyber OS knowledge base."}}
+window.CYBER_KNOWLEDGE_GAMES={makeGame,capacity:1000000};
+})();
