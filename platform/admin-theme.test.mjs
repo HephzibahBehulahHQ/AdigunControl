@@ -10,11 +10,12 @@ test('private command center and workbench use parent and product wordmarks with
   const control = fs.readFileSync(path.join(root, 'apps/admin/admin.html'), 'utf8');
   const tools = fs.readFileSync(path.join(root, 'apps/admin/admin-tools.html'), 'utf8');
   const cyber = fs.readFileSync(path.join(root, 'apps/cyber-os/index.html'), 'utf8');
-  for (const html of [control, tools, cyber]) {
+  for (const html of [tools, cyber]) {
     assert.match(html, /class="hb-company-wordmark"><img class="hb-company-logo" src="\/_hb\/hephzibah-behulah-official\.jpg" alt="HEPHZIBAH BEHULAH">/);
     assert.match(html, /class="hb-product-wordmark">ADIGUN/);
   }
-  assert.match(control, /href="\/admin\/" aria-label="HEPHZIBAH BEHULAH, ADIGUN Control"/);
+  assert.match(control, /class="hb-admin-header-mark" href="#overview"/);
+  assert.doesNotMatch(control, /class="os-brand hb-product-lockup"/);
   assert.match(tools, /href="\/admin\/cyber-os\/"[^>]*>⌘ ADIGUN CYBER OS/);
   assert.match(tools, /href="\/admin\/">ADIGUN Control/);
   assert.doesNotMatch(tools, /adigun-contol/);

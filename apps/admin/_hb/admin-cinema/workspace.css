@@ -83,3 +83,10 @@ dialog:is(#hb-admin-accounts,#hb-admin-security) th { color: inherit; background
   #hb-admin-accounts .monitor-actions { margin-inline-start: 0; }
   #hb-admin-accounts table { min-width: 620px; }
 }
+
+.hb-control-side .hb-sidebar-heading { margin: 14px 14px 10px; font: 700 14px/1.25 Inter,sans-serif; color: inherit; }
+.hb-unified .hb-control-top .hb-member-actions { flex: 0 0 auto; margin: 0; }
+@media (max-width: 1050px) {
+  .hb-unified .hb-control-top .hb-utilities { flex-wrap: wrap; }
+  .hb-control-top .hb-search-dropdown { left: 0; right: auto; width: min(100%, 560px); }
+}
