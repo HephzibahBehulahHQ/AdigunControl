@@ -47,6 +47,11 @@ export function resolveRoute(url){
 export function createPlatform({legacy,verifyAdmin,cyberAI,accountAdmin,memberAuth=publicAuth}){
   const handler={async fetch(request,env,ctx){
     const url=new URL(request.url),route=resolveRoute(url);
+    const pageRewriter=()=>{
+      const rewriter=new HTMLRewriter();
+      if(route.privateHost)rewriter.on('html',{element(element){element.setAttribute('data-hb-private','true');}});
+      return rewriter;
+    };
     const releaseMeta=!route.privateHost?'<script src="/_hb/release-update.js" defer></script>':'';
     if(route.kind==='reject'||route.kind==='retired'&&!route.privateHost)return reply(route.status,'Not found');
     if(route.kind==='status'){
@@ -97,7 +102,7 @@ export function createPlatform({legacy,verifyAdmin,cyberAI,accountAdmin,memberAu
       if(headers.get('content-type')?.includes('text/html')){headers.delete('etag');headers.delete('last-modified');headers.delete('content-length');}
       let result=new Response(response.body,{status:response.status,headers});
       const legacyBase=route.privateHost&&/^\/(?:admin\/)?cyber-os(?:\/|$)/.test(url.pathname)?'/cyber-os/':'/';
-      if(response.ok&&headers.get('content-type')?.includes('text/html')&&typeof HTMLRewriter!=='undefined')result=new HTMLRewriter().on('head',{element(el){el.prepend(releaseMeta+'<base href="'+legacyBase+'"><link rel="stylesheet" href="/_hb/platform.css"><link rel="stylesheet" href="/_hb/member.css">'+(!route.privateHost&&!publicStatusPage?'<script src="/_hb/member.js" defer></script>':'')+'<script src="/_hb/platform.js" defer></script><link rel="stylesheet" href="/_hb/experience.css"><script src="/_hb/experience.js" defer></script>'+(!route.privateHost?'<script src="/_hb/language-system.js?v=20261024-1" defer></script>':''),{html:true});}}).transform(result);
+      if(response.ok&&headers.get('content-type')?.includes('text/html')&&typeof HTMLRewriter!=='undefined')result=pageRewriter().on('head',{element(el){el.prepend(releaseMeta+'<base href="'+legacyBase+'"><link rel="stylesheet" href="/_hb/platform.css"><link rel="stylesheet" href="/_hb/member.css">'+(!route.privateHost&&!publicStatusPage?'<script src="/_hb/member.js" defer></script>':'')+'<script src="/_hb/platform.js" defer></script><link rel="stylesheet" href="/_hb/experience.css"><script src="/_hb/experience.js" defer></script>'+(!route.privateHost?'<script src="/_hb/language-system.js?v=20261024-1" defer></script>':''),{html:true});}}).transform(result);
       return result;
     }
     if(!['GET','HEAD'].includes(request.method))return reply(405,'Method not allowed');
@@ -111,7 +116,7 @@ export function createPlatform({legacy,verifyAdmin,cyberAI,accountAdmin,memberAu
     if(route.kind==='app'&&response.ok&&headers.get('content-type')?.includes('text/html')&&typeof HTMLRewriter!=='undefined'){
       const base=route.base,embedded=url.searchParams.get('vp_embed')==='1';
       const globalScripts=embedded?'':'<link rel="stylesheet" href="/_hb/member.css">'+(!route.privateHost&&!publicStatusPage?'<script src="/_hb/member.js" defer></script>':'')+'<script src="/_hb/platform.js" defer></script><link rel="stylesheet" href="/_hb/experience.css"><script src="/_hb/experience.js" defer></script>'+(!route.privateHost?'<script src="/_hb/language-system.js?v=20261024-1" defer></script>':'');
-      result=new HTMLRewriter().on('head',{element(el){el.prepend(releaseMeta+'<base href="'+base+'"><link rel="stylesheet" href="/_hb/platform.css">'+globalScripts,{html:true});}}).transform(result);
+      result=pageRewriter().on('head',{element(el){el.prepend(releaseMeta+'<base href="'+base+'"><link rel="stylesheet" href="/_hb/platform.css">'+globalScripts,{html:true});}}).transform(result);
     }
     return result;
   }};
