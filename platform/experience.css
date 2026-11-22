@@ -112,7 +112,7 @@ html:has(body.hb-admin-workspace),body.hb-admin-workspace{height:100%;overflow:h
 .hb-admin-workspace .os-shell{height:100dvh;min-height:0;overflow:hidden!important}
 .hb-admin-workspace .os-sidebar{position:relative;top:auto;height:100%;min-height:0;overflow-y:auto;overscroll-behavior:contain}
 .hb-admin-workspace .os-main{min-height:0;height:100%;min-width:0;overflow:auto;overscroll-behavior:contain;scroll-padding-top:8rem}
-.hb-unified .hb-admin-workspace .os-top,.hb-admin-workspace .os-top{position:sticky!important;inset:0 auto auto!important;z-index:30;gap:.65rem;min-height:3.75rem;background:var(--hb-surface,var(--panel,#111c2d))}
+.hb-unified.hb-admin-workspace .os-top,.hb-admin-workspace .os-top{position:sticky!important;inset:0 auto auto!important;z-index:30;gap:.65rem;min-height:3.75rem;background:var(--hb-surface,var(--panel,#111c2d))}
 .hb-admin-workspace .hb-admin-view-hidden{display:none!important}
 .hb-admin-brand,.hb-workspace-switcher a{display:flex;align-items:center;gap:.5rem;text-decoration:none;font-weight:650}
 .hb-admin-brand{white-space:nowrap}
@@ -129,7 +129,7 @@ html:has(body.hb-admin-workspace),body.hb-admin-workspace{height:100%;overflow:h
   body.hb-admin-workspace .os-shell{grid-template-columns:200px minmax(0,1fr)}
 }
 @media(max-width:768px){
-  .hb-unified .hb-admin-workspace .os-top{padding-inline:5.5rem .6rem!important}
+  .hb-unified.hb-admin-workspace .os-top{padding-inline:5.5rem .6rem!important}
   .hb-admin-workspace .os-sidebar{position:fixed;height:100dvh}
   .hb-admin-workspace .os-main{scroll-padding-top:11rem}
 }
@@ -159,19 +159,20 @@ html:has(body.hb-admin-workspace),body.hb-admin-workspace{height:100%;overflow:h
 .hb-admin-workspace .resource-controls label{flex:1 1 15rem}
 .hb-admin-workspace :is(#ebookGrid,#docGrid) .hb-card{min-height:0;padding:.65rem .8rem;background:var(--hb-surface-alt);border-color:var(--hb-border)}
 @media(max-width:768px){
-  .hb-unified .hb-admin-workspace .os-top{padding:.5rem .65rem!important;gap:.35rem!important}
+  .hb-unified.hb-admin-workspace .os-top{padding:.5rem .65rem!important;gap:.35rem!important}
   .hb-admin-workspace .os-top>.os-breadcrumb{display:none}
   .hb-admin-workspace .os-top>:is(.hb-admin-brand,.hb-admin-header-mark){margin-inline-start:3rem;min-height:2.5rem}
-  .hb-admin-workspace .hb-mobile-nav-toggle{z-index:12000!important;position:fixed!important;inset:.55rem auto auto .6rem!important;width:2.5rem;min-width:2.5rem;height:2.5rem;min-height:2.5rem}
+  body.hb-unified.hb-admin-workspace > #hbMobileNavToggle{z-index:12000!important;position:fixed!important;inset:.55rem auto auto .6rem!important;display:inline-flex!important;width:2.5rem;min-width:2.5rem;height:2.5rem;min-height:2.5rem}
   .hb-admin-workspace .hb-mobile-nav-toggle span:last-child{display:none}
   .hb-admin-workspace .os-sidebar{padding-top:3.5rem!important}
-  .hb-unified .hb-admin-workspace .os-top-actions{flex:1 1 100%;gap:.35rem}
-  .hb-unified .hb-admin-workspace .hb-utilities{flex:1 1 1px;margin:0;flex-wrap:nowrap;gap:.35rem}
+  .hb-unified.hb-admin-workspace .os-top-actions{flex:1 1 100%;gap:.35rem}
+  .hb-unified.hb-admin-workspace .hb-utilities{flex:1 1 1px;margin:0;flex-wrap:nowrap;gap:.35rem}
   .hb-admin-workspace .hb-utilities :is(#hbLanguageControl,.hb-theme-control){padding:0 .3rem;min-height:2.1rem}
   .hb-admin-workspace .hb-utilities :is(#hbLanguage,#hbTheme){min-height:2rem;max-width:7rem}
   .hb-admin-workspace .hb-theme-control{font-size:0}
-  .hb-unified .hb-admin-workspace details.hb-member-actions{min-width:0}
-  .hb-unified .hb-admin-workspace details.hb-member-actions>summary{min-height:2.1rem;padding:.35rem;font-size:.8rem}
+  .hb-unified.hb-admin-workspace details.hb-member-actions{min-width:0}
+  .hb-unified.hb-admin-workspace details.hb-member-actions>summary{min-height:2.1rem;padding:.35rem;font-size:.8rem}
   .hb-admin-workspace #megaToolGrid,.hb-admin-workspace .mega-category-overview{grid-template-columns:minmax(0,1fr)!important}
   .hb-admin-workspace .mega-tool-card{min-width:0}
+  .hb-unified.hb-admin-workspace .os-top .hb-search-dropdown{inset-inline:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box}
 }
