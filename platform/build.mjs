@@ -26,5 +26,6 @@ for (const file of ['hb-logo.svg', 'hephzibah-behulah-official.jpg']) copy('pack
 copy('packages/shared-i18n/language-system.js', '_hb/language-system.js');
 copy('packages/shared-ui/css/sitewide-osint-theme.css', '_hb/sitewide-osint-theme.css');
 copy('packages/shared-data/data/translations', '_hb/data/translations');
+for (const file of ['source-library.json', 'ai-platform.json']) copy('packages/shared-data/data/' + file, 'data/' + file);
 const commitHash = process.env.GITHUB_SHA || execFileSync('git', ['rev-parse', 'HEAD'], {cwd: root, encoding: 'utf8'}).trim();
 fs.writeFileSync(path.join(destination, '_hb/status-build.json'), JSON.stringify({commitHash, buildTimestamp: new Date().toISOString()}));
