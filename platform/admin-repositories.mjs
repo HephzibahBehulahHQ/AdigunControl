@@ -20,7 +20,7 @@ export async function adminRepositories(request, env, verified, fetcher = (input
       endpoint.search = new URLSearchParams({...filters,per_page:'100',page:String(page)});
       const headers = {accept:'application/vnd.github+json', 'user-agent':'HB-Private-Repository-Inventory'};
       if (token) headers.authorization = 'Bearer ' + token;
-      const upstream = await fetcher(endpoint.href, {headers, redirect:'error', signal:AbortSignal.timeout(6000)});
+      const upstream = await fetcher(endpoint.href, {headers, redirect:'manual', signal:AbortSignal.timeout(6000)});
       if (!upstream.ok) throw new Error('GitHub HTTP ' + upstream.status);
       const payload = await upstream.json();
       const batch = search ? payload.items : payload;
