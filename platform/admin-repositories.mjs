@@ -12,16 +12,18 @@ export async function adminRepositories(request, env, verified, fetcher = fetch)
     return response({error: 'Please wait before refreshing'}, 429);
   }
 
-  async function list(token) {
+  async function list(token, search = false) {
     const repositories = [];
     for (let page = 1; page <= 20; page++) {
-      const endpoint = new URL('https://api.github.com/orgs/' + organization + '/repos');
-      endpoint.search = new URLSearchParams({type:token?'all':'public',sort:'created',direction:'desc',per_page:'100',page:String(page)});
+      const endpoint = new URL(search ? 'https://api.github.com/search/repositories' : 'https://api.github.com/orgs/' + organization + '/repos');
+      const filters = search ? {q:'org:' + organization + ' is:public',sort:'created',order:'desc'} : {type:token?'all':'public',sort:'created',direction:'desc'};
+      endpoint.search = new URLSearchParams({...filters,per_page:'100',page:String(page)});
       const headers = {accept:'application/vnd.github+json', 'user-agent':'HB-Private-Repository-Inventory'};
       if (token) headers.authorization = 'Bearer ' + token;
       const upstream = await fetcher(endpoint, {headers, redirect:'error', signal:AbortSignal.timeout(6000)});
       if (!upstream.ok) throw new Error('GitHub inventory is unavailable');
-      const batch = await upstream.json();
+      const payload = await upstream.json();
+      const batch = search ? payload.items : payload;
       if (!Array.isArray(batch)) throw new Error('Invalid GitHub inventory response');
       for (const repo of batch) {
         if (repo.archived || repo.fork || typeof repo.name !== 'string' || !/^[a-z0-9_.-]+$/i.test(repo.name) || repo.name === '.' || repo.name === '..') continue;
@@ -39,7 +41,7 @@ export async function adminRepositories(request, env, verified, fetcher = fetch)
   }
 
   const [publicList, credentialList] = await Promise.allSettled([
-    list(), env.GITHUB_TOKEN ? list(env.GITHUB_TOKEN) : Promise.reject(new Error('No GitHub credential'))
+    list().catch(() => list(undefined, true)), env.GITHUB_TOKEN ? list(env.GITHUB_TOKEN) : Promise.reject(new Error('No GitHub credential'))
   ]);
   if (publicList.status !== 'fulfilled' && credentialList.status !== 'fulfilled') {
     return response({error:'GitHub repository inventory is unavailable'}, 502);
