@@ -511,7 +511,7 @@ window.HBUpgradeMegaTools=function(list){
    const categoryRows=[...counts.entries()].sort((a,b)=>a[0].localeCompare(b[0]));
    const groups=scope==="tool-lab" ? [["Engineering",categoryRows.filter(([name])=>!technologyDomains.has(name))],["Computing and data",categoryRows.filter(([name])=>technologyDomains.has(name))]] : [["Security calculators",categoryRows]];
    grid.innerHTML=groups.filter(([,entries])=>entries.length).map(([label,entries])=>'<div class="mega-domain-group"><h3>'+esc(label)+'</h3><div class="mega-category-overview" aria-label="'+esc(label)+' categories">'+entries.map(([cat,n])=>'<button type="button" class="mega-category-tile" data-open-mega-category="'+esc(cat)+'"><span>'+n+' CAPABILITIES</span><strong>'+esc(cat)+'</strong><small>Browse this domain →</small></button>').join("")+'</div></div>').join("")+'<p class="mega-catalog-hint">Choose a domain or search by tool name, alias, category, formula, description, keyword or source. All catalogue records remain searchable even when not shown.</p>';
-   if($("megaToolCount"))$("megaToolCount").textContent=tools.length.toLocaleString()+" capabilities across "+counts.size.toLocaleString()+" domains";
+   if($("megaToolCount"))$("megaToolCount").textContent=tools.length.toLocaleString()+" capabilities across "+counts.size.toLocaleString()+(counts.size===1?" domain":" domains");
    return;
   }
   const qNormal=normaliseSearch(q),qCompact=qNormal.replace(/\s+/g,"");

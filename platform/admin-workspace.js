@@ -12,6 +12,7 @@
 
   if (!control) {
     sidebar.querySelector('.os-brand')?.remove();
+    header.querySelector('.os-breadcrumb')?.remove();
     const brand = document.createElement('a');
     brand.className = 'hb-admin-brand';
     brand.href = '/';
@@ -52,7 +53,7 @@
     if (external && blog) external.append(blog);
     footer.className = 'hb-admin-footer';
     const label = document.createElement('span');
-    label.textContent = 'Adigun Control · ' + workspace + ' · Private workspace';
+    label.textContent = (control ? 'Adigun Control' : 'Adigun Control · ' + workspace) + ' · Private workspace';
     const top = document.createElement('button');
     top.type = 'button';
     top.textContent = 'Back to top';
@@ -114,7 +115,7 @@
 
   function show(anchor, scroll = true) {
     const view = sections.find(section => section === anchor || section.contains(anchor)) || home;
-    for (const section of sections) section.classList.toggle('hb-admin-view-hidden', section !== view);
+    for (const section of sections) section.hidden = section !== view;
     for (const link of sidebar.querySelectorAll('a[href*="#"]')) {
       const selected = link.pathname === location.pathname && link.hash === '#' + view.id;
       link.classList.toggle('active', selected);
