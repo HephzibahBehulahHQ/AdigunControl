@@ -10,11 +10,11 @@
 <link rel="stylesheet" href="css/mobile-system.css?v=20261004-3">
 <link rel="stylesheet" href="css/adigun-sidebar.css?v=20261010-1">
 <link rel="stylesheet" href="/_hb/admin-cinema/showroom.css"><link rel="stylesheet" href="/_hb/admin-cinema/portfolio.css">
-<link rel="stylesheet" href="/_hb/admin-cinema/knowledge-library.css">
+<link rel="stylesheet" href="/_hb/admin-cinema/knowledge-library.css"><link rel="stylesheet" href="/_hb/admin-cinema/control-room.css">
 </head>
 <body class="osint-redesign adigun-admin-page">
 <div class="os-shell">
-<aside class="os-sidebar">
+<aside class="os-sidebar hb-control-side">
 <a class="os-brand hb-product-lockup" href="/admin/" aria-label="HEPHZIBAH BEHULAH, ADIGUN Control"><span class="hb-company-wordmark"><img class="hb-company-logo" src="/_hb/hephzibah-behulah-official.jpg" alt="HEPHZIBAH BEHULAH"></span><span class="hb-brand-divider" aria-hidden="true"></span><span class="hb-product-wordmark">ADIGUN<small>CONTROL · A PRODUCT OF HEPHZIBAH BEHULAH</small></span></a>
 <details class="os-nav-dropdown" data-nav-group="private-control" open><summary class="os-side-label">PRIVATE CONTROL</summary><nav class="os-nav">
 <a class="active" href="#overview">◉ OVERVIEW</a><a href="#portfolio">▦ PORTFOLIO</a><a href="#admin-intelligence-tree">⌘ INTELLIGENCE TREE</a><a href="#intelligence">▤ INTELLIGENCE</a><a href="#github-knowledge">▤ KNOWLEDGE LIBRARY</a><a href="#terminal">▣ LINUX TERMINAL</a><a href="#operator">⌁ ADMIN AI</a><a href="#ai-agent">◉ PUBLIC AI</a><a href="https://hephzibahbehulah.com">← PUBLIC SITE</a>
@@ -24,8 +24,8 @@
 <a href="https://github.com/HephzibahBehulah">◉ GitHub</a><a href="https://www.linkedin.com/in/isaacoluwoleadigun">in LinkedIn</a><a href="https://x.com/HephzibahBehulah">𝕏 X</a><a href="https://www.facebook.com/HephzibahBehulah">f Facebook</a><a href="https://gitbook.io/">▤ GitBook</a>
 </nav></details>
 <div class="os-status">ACCESS<br><b id="accessStatus">● CHECKING</b><br>identity: <span id="identityEmail">—</span><br>scope: private control</div></aside>
-<main class="os-main"><header class="os-top"><div class="hb-admin-header-mark"><img src="/_hb/admin-cinema/hb-mark.png" width="250" height="162" alt=""><div><b>Adigun Control</b><small>Hephzibah Behulah</small></div></div><div class="os-top-actions"><input id="globalResourceSearch" class="os-search" placeholder="search everything..." aria-label="Search everything"><button class="os-btn" id="refreshStatus" type="button">REFRESH</button></div></header>
-<div class="os-content">
+<main class="os-main hb-control-main"><header class="os-top hb-control-top"><a class="hb-admin-header-mark" href="#overview" aria-label="Adigun Control overview"><img src="/_hb/admin-cinema/hb-mark.png" width="250" height="162" alt=""><div><b>Adigun Control</b><small>Hephzibah Behulah</small></div></a><nav class="hb-control-quick" aria-label="Control room shortcuts"><a href="#overview">Overview</a><a href="#portfolio">Portfolio</a><a href="#intelligence">Diagnostics</a></nav><div class="os-top-actions"><input id="globalResourceSearch" class="os-search" placeholder="search everything..." aria-label="Search everything"><button class="os-btn" id="refreshStatus" type="button">REFRESH</button></div></header>
+<div class="os-content hb-control-workspace">
 <section class="os-panel admin-section adigun-command-overview" id="overview">
   <div class="adigun-overview-grid">
     <div class="adigun-overview-main">
@@ -107,7 +107,7 @@
     <span>AUTHORISED · PRIVACY-AWARE · EVIDENCE-FIRST</span>
   </div>
 </section>
-<section class="os-panel admin-section hb-admin-portfolio" id="portfolio"><div class="os-panel-head"><span>PORTFOLIO</span><span>READ-ONLY CATALOG</span></div><div class="hb-admin-scope"><label>Brand<select data-hbp-brand></select></label><label>Product<select data-hbp-product></select></label><label>Film<select data-hbp-mode><option value="product">Product in action</option><option value="management">Manage this product · preview</option></select></label></div><h2 data-hbp-title>Portfolio</h2><div class="hb-admin-record" data-hbp-record></div><details class="hb-admin-cinema"><summary>Watch portfolio film</summary><div class="showroom" data-hbp-player></div></details></section>
+<section class="os-panel admin-section hb-admin-portfolio" id="portfolio"><div class="os-panel-head"><span>PORTFOLIO</span><span>READ-ONLY CATALOG</span></div><div class="hb-admin-scope"><label>Brand<select data-hbp-brand></select></label><label>Product<select data-hbp-product></select></label><label>Film<select data-hbp-mode><option value="product">Product in action</option><option value="management">Manage this product · preview</option></select></label></div><h2 data-hbp-title>Portfolio</h2><div class="hb-admin-record" data-hbp-record></div><details class="hb-admin-cinema" open><summary>Watch portfolio film</summary><div class="showroom" data-hbp-player></div></details></section>
 <section class="os-panel admin-section" id="admin-intelligence-tree"><div class="os-panel-head"><span>02 / PRIVATE INTELLIGENCE TREE</span><span>CLICK A NODE TO NAVIGATE</span></div><div class="os-tree-toolbar"><span>ADIGUN CONTROL / PRIVATE MAP</span><button id="resetAdminTree" class="os-mini" type="button">RESET MAP</button></div><div class="admin-tree-wrap"><div id="adminIntelTree" class="admin-map-canvas"></div></div><div id="adminNodeInfo" class="admin-node-info"><b>PRIVATE CONTROL</b><span>Select a node to inspect the branch, or select a leaf to open its destination.</span></div></section>
 <section class="os-panel admin-section" id="intelligence"><div class="os-panel-head"><span>03 / LIVE INTELLIGENCE TOOLS</span><span id="inspectState">READY</span></div><div class="admin-ops"><button class="os-btn" data-inspect="all" type="button">FULL SYSTEM CHECK</button><button class="os-btn" data-inspect="site" type="button">CHECK WEBSITE</button><button class="os-btn" data-inspect="security" type="button">SECURITY HEADERS</button><button class="os-btn" data-inspect="github" type="button">CHECK GITHUB</button><button class="os-btn" data-inspect="cloudflare" type="button">CHECK CLOUDFLARE EDGE</button></div><pre class="admin-inspect-output" id="inspectOutput">No inspection has been run.</pre></section>
 <section class="os-panel admin-section" id="github-knowledge" aria-labelledby="hbkTitle">
@@ -132,6 +132,6 @@
 <script src="js/admin-intelligence-map.js?v=20261004-1"></script>
 <script src="js/language-system.js?v=20261024-1"></script>
 <script src="js/adigun-sidebar.js?v=20261010-1"></script>
-<script src="/_hb/admin-cinema/catalog.js" defer></script><script src="/_hb/admin-cinema/showroom.js" defer></script><script src="/_hb/admin-cinema/portfolio.js" defer></script>
+<script src="/_hb/admin-cinema/catalog.js" defer></script><script src="/_hb/admin-cinema/showroom.js" defer></script><script src="/_hb/admin-cinema/control-room.js" defer></script><script src="/_hb/admin-cinema/portfolio.js" defer></script>
 <script src="/_hb/admin-cinema/knowledge-library.js" defer></script>
 </body></html>

@@ -1,0 +1,28 @@
+
+.hb-control-top .hb-admin-header-mark { text-decoration: none; color: inherit; }
+.hb-control-top .hb-admin-header-mark img { width: 56px; height: 36px; object-fit: contain; background: #091625; }
+.hb-control-quick { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.hb-control-quick a {
+  padding: 7px 12px;
+  border: 1px solid #42647e;
+  border-radius: 7px;
+  color: inherit;
+  text-decoration: none;
+  font-weight: 650;
+}
+.hb-control-quick a[aria-current="location"], .hb-control-quick a:hover {
+  background: #163953;
+  border-color: #50d4e8;
+  color: #ecf8ff;
+}
+.hb-control-workspace > .admin-section[hidden] { display: none !important; }
+.hb-control-workspace > .admin-section { scroll-margin-top: 84px; }
+.hb-control-workspace .hb-admin-cinema .showroom { width: min(100%, 56rem); }
+.hb-control-workspace .hb-admin-cinema .showroom video { max-height: min(50vh, 480px); }
+.hb-control-workspace .hb-admin-cinema .showroom:is(:fullscreen,:popover-open) video { max-height: none; }
+@media (max-width: 960px) {
+  .hb-control-quick a { padding: 6px 8px; }
+}
+@media (max-width: 640px) {
+  .hb-control-top .hb-admin-header-mark img { width: 38px; height: 27px; }
+}
