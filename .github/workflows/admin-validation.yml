@@ -1,0 +1,30 @@
+name: Validate private Admin
+
+on:
+  pull_request:
+  push:
+    branches: [main, 'codex/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Test private routes and workflows
+        run: node --test platform/*.test.mjs
+      - name: Build standalone Admin assets
+        run: node platform/build.mjs
+      - name: Verify the protected entry points
+        run: |
+          test -s dist-admin/admin.html
+          test -s dist-admin/admin-tools.html
+          test -s dist-admin/_hb/admin-cinema/knowledge-library.json
+          test -s dist-admin/data/source-library.json
+          test ! -e dist-admin/index.html
