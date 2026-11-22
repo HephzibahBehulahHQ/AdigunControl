@@ -18,7 +18,11 @@
     const logo = document.createElement('img');
     logo.src = '/_hb/admin-cinema/hb-mark.png';
     logo.alt = '';
-    brand.append(logo, 'Adigun Control');
+    const brandCopy = document.createElement('span');
+    const scope = document.createElement('small');
+    scope.textContent = workspace;
+    brandCopy.append('Adigun Control', scope);
+    brand.append(logo, brandCopy);
     header.prepend(brand);
   }
 

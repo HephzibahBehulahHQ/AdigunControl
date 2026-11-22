@@ -22,7 +22,14 @@ const emailCodeCopy={
 export function openAdigunSPsAdmin(){
  const accountEndpoint=document.querySelector('meta[name=hb-adigunsps-account][content=verified]')
   ? productAccountEndpoints[location.hostname] : null;
- if(location.hostname!=='admin.hephzibahbehulah.com'&&!accountEndpoint)return;
+ if(location.hostname!=='admin.hephzibahbehulah.com'&&!accountEndpoint){
+  const unavailable=make('dialog');
+  unavailable.className='hb-platform-dialog';
+  unavailable.setAttribute('aria-label','AdigunSPs administration');
+  unavailable.append(make('h2','AdigunSPs administration'),make('p','Recipe review requires a verified AdigunSPs account endpoint for this Admin environment.'),button('Close',()=>unavailable.close()));
+  unavailable.addEventListener('close',()=>unavailable.remove(),{once:true});
+  document.body.append(unavailable);unavailable.showModal();return;
+ }
  const existing=document.querySelector('#hb-adigunsps-admin');if(existing){existing.focus();return;}
  const language=document.documentElement.lang.split('-')[0];
  const copy=adminCopy(language),codeCopy=emailCodeCopy[language]||emailCodeCopy.en;

@@ -151,3 +151,27 @@ html:has(body.hb-admin-workspace),body.hb-admin-workspace{height:100%;overflow:h
 .hb-admin-workspace .mega-tool-card{background:var(--hb-surface-alt);color:var(--hb-text);border-color:var(--hb-border)}
 .hb-admin-workspace .resource-tool-card{background:var(--hb-surface);color:var(--hb-text)}
 .hb-admin-workspace .os-top:focus-within{z-index:31}
+
+.hb-admin-brand small{display:block;font-size:.7rem;color:var(--hb-muted)}
+.hb-admin-workspace #megaToolCount{display:inline!important}
+.hb-admin-workspace .resource-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
+.hb-admin-workspace .resource-controls :is(label,input,select){min-width:0;max-width:100%}
+.hb-admin-workspace .resource-controls label{flex:1 1 15rem}
+.hb-admin-workspace :is(#ebookGrid,#docGrid) .hb-card{min-height:0;padding:.65rem .8rem;background:var(--hb-surface-alt);border-color:var(--hb-border)}
+@media(max-width:768px){
+  .hb-unified .hb-admin-workspace .os-top{padding:.5rem .65rem!important;gap:.35rem!important}
+  .hb-admin-workspace .os-top>.os-breadcrumb{display:none}
+  .hb-admin-workspace .os-top>:is(.hb-admin-brand,.hb-admin-header-mark){margin-inline-start:3rem;min-height:2.5rem}
+  .hb-admin-workspace .hb-mobile-nav-toggle{z-index:12000!important;position:fixed!important;inset:.55rem auto auto .6rem!important;width:2.5rem;min-width:2.5rem;height:2.5rem;min-height:2.5rem}
+  .hb-admin-workspace .hb-mobile-nav-toggle span:last-child{display:none}
+  .hb-admin-workspace .os-sidebar{padding-top:3.5rem!important}
+  .hb-unified .hb-admin-workspace .os-top-actions{flex:1 1 100%;gap:.35rem}
+  .hb-unified .hb-admin-workspace .hb-utilities{flex:1 1 1px;margin:0;flex-wrap:nowrap;gap:.35rem}
+  .hb-admin-workspace .hb-utilities :is(#hbLanguageControl,.hb-theme-control){padding:0 .3rem;min-height:2.1rem}
+  .hb-admin-workspace .hb-utilities :is(#hbLanguage,#hbTheme){min-height:2rem;max-width:7rem}
+  .hb-admin-workspace .hb-theme-control{font-size:0}
+  .hb-unified .hb-admin-workspace details.hb-member-actions{min-width:0}
+  .hb-unified .hb-admin-workspace details.hb-member-actions>summary{min-height:2.1rem;padding:.35rem;font-size:.8rem}
+  .hb-admin-workspace #megaToolGrid,.hb-admin-workspace .mega-category-overview{grid-template-columns:minmax(0,1fr)!important}
+  .hb-admin-workspace .mega-tool-card{min-width:0}
+}
