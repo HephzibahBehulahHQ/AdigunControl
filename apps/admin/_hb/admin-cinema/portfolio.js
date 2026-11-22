@@ -9,6 +9,53 @@
   const mode = root.querySelector('[data-hbp-mode]');
   const stage = root.querySelector('[data-hbp-player]');
   const details = root.querySelector('details');
+
+  const discovery = document.createElement('details');
+  const discoveryTitle = document.createElement('summary');
+  discoveryTitle.textContent = 'Repository discovery';
+  const discoveryStatus = document.createElement('p');
+  discoveryStatus.setAttribute('role', 'status');
+  const discoveryList = document.createElement('ul');
+  const refreshRepos = document.createElement('button');
+  refreshRepos.type = 'button';
+  refreshRepos.className = 'os-btn';
+  refreshRepos.textContent = 'Refresh repositories';
+  discovery.append(discoveryTitle, discoveryStatus, refreshRepos, discoveryList);
+  root.append(discovery);
+  const normalized = value => value.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const knownProducts = new Set(products.map(product => normalized(product.name)));
+  let loading = false;
+  async function discoverRepositories() {
+    if (loading) return;
+    loading = true;
+    refreshRepos.disabled = true;
+    discoveryStatus.textContent = 'Checking GitHub…';
+    try {
+      const result = await fetch('/api/admin/repositories', {headers:{accept:'application/json'}});
+      if (!result.ok) throw new Error('Repository inventory is unavailable.');
+      const {repositories, coverage} = await result.json();
+      const unclassified = repositories.filter(repo => !knownProducts.has(normalized(repo.name)));
+      const items = unclassified.map(repo => {
+        const item = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = repo.url;
+        link.textContent = repo.name;
+        item.append(link, ' · ' + repo.visibility + ' · Unclassified');
+        return item;
+      });
+      discoveryList.replaceChildren(...items);
+      discoveryStatus.textContent = unclassified.length + ' repositories outside the product catalog. ' + coverage + '.';
+    } catch {
+      discoveryStatus.textContent = 'Could not refresh the repository inventory.';
+    } finally {
+      loading = false;
+      refreshRepos.disabled = false;
+    }
+  }
+  refreshRepos.addEventListener('click', discoverRepositories);
+  discovery.addEventListener('toggle', () => {
+    if (discovery.open) discoverRepositories();
+  });
   const sectionFilms = {
     overview:['Admin Overview', 'Watch the control room overview'],
     'admin-intelligence-tree':['Company Ecosystem', 'Watch the portfolio map'],

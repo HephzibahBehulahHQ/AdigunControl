@@ -1,3 +1,4 @@
+import {adminRepositories} from './admin-repositories.mjs';
 import {publicAuth} from './public-auth.mjs';
 import {publicServiceWorker} from './public-sw.mjs';
 import {assetCacheHeaders} from './cache-policy.mjs';
@@ -27,6 +28,7 @@ export function resolveRoute(url){
   if(!privateHost&&path==='/_hb/release.json')return {kind:'status',privateHost:false};
   if(path==='/api/cyber/chat')return {kind:'cyber-ai',privateHost};
   if(privateHost&&['/and','/and/'].includes(path))return {kind:'app',privateHost:true,app:'admin',prefix:'',base:'/',path:'/admin.html'};
+  if(privateHost&&path==='/api/admin/repositories')return {kind:'admin-repositories',privateHost:true};
   if(privateHost&&['/api/admin/security','/api/admin/security/session'].includes(path))return {kind:'admin-security',privateHost:true};
   if(privateHost&&['/api/admin/accounts','/api/admin/accounts/events','/api/admin/accounts/operations'].includes(path))return {kind:'admin-accounts',privateHost:true};
   if(!privateHost&&path.startsWith('/api/')&&!MAIN.has(host))return {kind:'reject',status:404};
@@ -70,6 +72,7 @@ export function createPlatform({legacy,verifyAdmin,cyberAI,accountAdmin,memberAu
     if(route.privateHost){
       const verified=await verifyAdmin(request,env);
       if(verified.ok&&!['GET','HEAD','OPTIONS'].includes(request.method)&&(request.headers.get('origin')!==url.origin||request.headers.get('sec-fetch-site')==='cross-site'))return reply(403,'Same-origin administrator request required');
+      if(verified.ok&&route.kind==='admin-repositories')return adminRepositories(request,env,verified);
       if(verified.ok&&route.kind==='admin-security')return adminSecurity(request,env,verified);
       if(!verified.ok){console.warn('HB_PRIVATE_ACCESS_DENIED',verified.code||'configuration_or_identity_rejected');return reply(verified.status||401,'Private workspace. Sign in through Cloudflare Access.');}
     }
