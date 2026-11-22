@@ -16,6 +16,7 @@
     'github-knowledge':['Admin Repositories', 'Watch a source inventory walkthrough'],
     terminal:['Admin Terminal', 'Watch the local terminal practice example'],
     operator:['Admin Bot', 'Watch guided Bot examples'],
+    'ai-agent':['Admin Bot', 'Watch guided Bot examples'],
   };
   const panels = new Map();
   for (const [id, [name, label]] of Object.entries(sectionFilms)) {
@@ -23,12 +24,14 @@
     if (!section) continue;
     const disclosure = document.createElement('details');
     disclosure.className = 'hb-admin-cinema';
+    disclosure.open = true;
     const summary = document.createElement('summary');
     summary.textContent = label;
     const screen = document.createElement('div');
     screen.className = 'showroom';
     disclosure.append(summary, screen);
-    section.append(disclosure);
+    if (id === 'overview') section.querySelector('.adigun-overview-grid').after(disclosure);
+    else section.append(disclosure);
     panels.set(id,{name,disclosure,screen,player:null});
     disclosure.addEventListener('toggle',syncPanels);
   }
@@ -66,7 +69,7 @@
     const management = selected && mode.value === 'management';
     const names = selected ? [management ? 'Admin Manage ' + selected.name : selected.name] :
       division ? [division.id, ...products.filter(p => p.division === division.id ||
-        p.relatedDivisions?.includes(division.id)).map(p => p.name)] : ['Admin Overview'];
+        p.relatedDivisions?.includes(division.id)).map(p => p.name)] : ['Admin Overview', ...products.map(p => p.name)];
     active = window.HBShowroom.mount(stage, names, {
       active: !document.hidden, walkthrough: Boolean(selected && !management),
     });
