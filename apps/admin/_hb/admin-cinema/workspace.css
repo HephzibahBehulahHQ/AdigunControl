@@ -1,0 +1,85 @@
+
+/* Shared operational layout, scoped to Adigun Control. */
+.hb-control-top { gap: 16px; align-items: center; }
+.hb-control-top .hb-admin-header-mark { flex: 0 0 auto; }
+.hb-unified .hb-control-top .os-top-actions {
+  display: flex; flex: 1 1 480px; flex-wrap: nowrap !important;
+  gap: 8px; align-items: center; justify-content: flex-end;
+}
+.hb-unified .hb-control-top .os-top-actions .hb-search-wrap { flex: 1 1 280px; min-width: 120px; }
+.hb-unified .hb-control-top .hb-utilities { flex-wrap: nowrap; gap: 6px; margin: 0; }
+.hb-control-top :is(.hb-utilities select, .os-mini, summary) { min-height: 34px; }
+.hb-control-top .hb-utilities label { gap: 5px; }
+@media (max-width: 1050px) {
+  .hb-unified .hb-control-top .os-top-actions { flex: 1 1 100%; flex-wrap: wrap !important; justify-content: flex-start; }
+  .hb-unified .hb-control-top .os-top-actions .hb-search-wrap { flex: 1 1 46%; }
+}
+@media (max-width: 540px) {
+  .hb-control-top { gap: 8px; }
+  .hb-unified .hb-control-top .hb-utilities { flex-wrap: wrap; }
+}
+
+dialog:is(#hb-admin-accounts,#hb-admin-security) {
+  --work-bg: #101b2c; --work-panel: #15243a; --work-line: #344761; --work-accent: #74dcea; --work-muted: #b6c6da;
+  width: min(1180px, calc(100vw - 28px)); max-height: calc(100dvh - 28px); max-width: none;
+  overflow: auto; overscroll-behavior: contain; padding: clamp(14px, 2vw, 24px);
+  border: 1px solid var(--work-line); border-radius: 16px; background: var(--work-bg); color: #edf5ff;
+}
+html[data-hb-theme="light"] dialog:is(#hb-admin-accounts,#hb-admin-security) {
+  --work-bg: #f8fafc; --work-panel: #eef4fa; --work-line: #b1c1d3; --work-accent: #14516a; --work-muted: #445568;
+  color: #15273b;
+}
+dialog:is(#hb-admin-accounts,#hb-admin-security)::backdrop { background: rgb(3 8 16 / 74%); backdrop-filter: blur(4px); }
+dialog:is(#hb-admin-accounts,#hb-admin-security) > header {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  position: sticky; top: 0; z-index: 2; margin: 0; padding: 0 0 12px;
+  border-bottom: 1px solid var(--work-line); background: var(--work-bg);
+}
+dialog:is(#hb-admin-accounts,#hb-admin-security) > header h2 { margin: 0; font: 750 clamp(20px,3vw,28px)/1.2 Inter, sans-serif; letter-spacing: -.025em; text-shadow: none; }
+dialog:is(#hb-admin-accounts,#hb-admin-security) > [role="status"] { margin: 10px 0 14px; font-size: 13px; color: var(--work-muted); }
+dialog:is(#hb-admin-accounts,#hb-admin-security) :is(button,select,input:not([type="checkbox"])) {
+  min-height: 36px; height: auto; padding: 7px 11px; border: 1px solid var(--work-line); border-radius: 7px;
+  color: inherit; background: var(--work-panel); font: 600 13px/1.3 Inter,sans-serif;
+}
+dialog:is(#hb-admin-accounts,#hb-admin-security) button:not(:disabled):hover { border-color: var(--work-accent); }
+dialog:is(#hb-admin-accounts,#hb-admin-security) :focus-visible { outline: 2px solid var(--work-accent); outline-offset: 2px; }
+#hb-admin-accounts :is(.monitor-stats,.monitor-controls,.monitor-detail), #hb-admin-security .security-kpis { display: grid; gap: 10px; }
+#hb-admin-accounts .monitor-stats, #hb-admin-security .security-kpis { grid-template-columns: repeat(auto-fit,minmax(min(140px,100%),1fr)); margin: 0 0 14px; }
+#hb-admin-accounts .monitor-stats > div,#hb-admin-security .security-kpis > div { padding: 11px 13px; border: 1px solid var(--work-line); border-radius: 9px; background: var(--work-panel); }
+#hb-admin-accounts .monitor-stats b,#hb-admin-security .security-kpis b { display: block; font-size: 22px; line-height: 1.2; }
+#hb-admin-accounts .monitor-stats span { font-size: 12px; color: var(--work-muted); }
+#hb-admin-accounts .monitor-tabs, #hb-admin-security [role="tablist"], #hb-admin-security .security-controls {
+  display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; padding: 0;
+  position: static; border: 0;
+}
+#hb-admin-accounts .monitor-tabs [aria-pressed="true"],#hb-admin-security [role="tab"][aria-selected="true"] {
+  color: var(--work-accent); border-color: var(--work-accent); box-shadow: inset 0 -2px var(--work-accent);
+}
+#hb-admin-accounts .monitor-controls { grid-template-columns: repeat(3,minmax(0,1fr)); padding: 12px; border: 1px solid var(--work-line); border-radius: 9px; }
+#hb-admin-accounts .monitor-controls > label:not([hidden]) { display: grid; gap: 4px; min-width: 0; font: 600 12px/1.4 Inter,sans-serif; }
+#hb-admin-accounts .monitor-controls :is(input[type="search"],select) { width: 100%; min-width: 0; }
+#hb-admin-accounts .monitor-options { grid-column: 1/-1; display: flex; gap: 8px 14px; flex-wrap: wrap; align-items: center; }
+#hb-admin-accounts .monitor-options label { display: inline-flex; gap: 6px; align-items: center; font: 600 12px/1.4 Inter,sans-serif; }
+#hb-admin-accounts .monitor-options input[type="checkbox"] { appearance: auto; inline-size: 16px; block-size: 16px; min-height: 0; margin: 0; padding: 0; flex: none; accent-color: #39b8d2; }
+#hb-admin-accounts .monitor-actions { margin-inline-start: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+#hb-admin-accounts .monitor-note { color: var(--work-muted); margin: 10px 0; padding: 8px 10px; font-size: 12px; line-height: 1.5; border-inline-start: 2px solid var(--work-accent); }
+#hb-admin-accounts .monitor-table-wrap,#hb-admin-security .security-panel { overflow-x: auto; }
+#hb-admin-accounts .monitor-table-wrap { margin-top: 8px; border: 1px solid var(--work-line); border-radius: 9px; }
+dialog:is(#hb-admin-accounts,#hb-admin-security) table { width: 100%; border-collapse: collapse; font-size: 13px; }
+dialog:is(#hb-admin-accounts,#hb-admin-security) :is(th,td) { text-align: start; padding: 8px 10px; border-bottom: 1px solid var(--work-line); overflow-wrap: anywhere; }
+dialog:is(#hb-admin-accounts,#hb-admin-security) th { color: inherit; background: var(--work-panel); }
+#hb-admin-accounts caption { padding: 8px 10px; text-align: start; color: var(--work-muted); }
+#hb-admin-accounts th button { padding: 2px 0; min-height: 28px; border: 0; background: transparent; }
+#hb-admin-accounts .monitor-detail { margin-top: 12px; padding: 14px; background: var(--work-panel); border: 1px solid var(--work-line); border-radius: 9px; }
+#hb-admin-accounts .monitor-detail dl { display: grid; grid-template-columns: minmax(90px,.4fr) minmax(0,1fr); gap: 5px 10px; }
+#hb-admin-accounts .monitor-detail dd { margin: 0; overflow-wrap: anywhere; }
+#hb-admin-security [role="tabpanel"] { padding: 0; min-height: 0; }
+#hb-admin-security :is(p,li) { color: var(--work-muted); }
+.hb-control-workspace :is(.hbk-filter,.hb-admin-scope) { padding: 12px; border: 1px solid var(--line,#344761); border-radius: 9px; }
+.hb-control-workspace :is(.hbk-reader,.hb-admin-record) { border-radius: 9px; }
+.hb-control-workspace :is(#github-knowledge,#portfolio,#terminal,#operator,#ai-agent) .hb-admin-cinema { margin-block-start: 20px; }
+@media (max-width: 640px) {
+  #hb-admin-accounts .monitor-controls { grid-template-columns: 1fr; }
+  #hb-admin-accounts .monitor-actions { margin-inline-start: 0; }
+  #hb-admin-accounts table { min-width: 620px; }
+}
