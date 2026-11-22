@@ -19,6 +19,7 @@ test('inventory returns safe repository metadata and excludes forks and archives
   const result = await adminRepositories(request, env, identity, async (url, options) => {
     assert.equal(url.hostname, 'api.github.com');
     assert.equal(url.pathname, '/orgs/HephzibahBehulahHQ/repos');
+    if (!options.headers.authorization) return Response.json([]);
     assert.equal(options.headers.authorization, 'Bearer fixture-only');
     return Response.json([
       {name:'NewProduct', visibility:'private', description:'Internal description'},
