@@ -48,3 +48,9 @@ test('Cyber OS carries the parent wordmark and its own product wordmark in the s
   assert.match(css, /\.hb-product-wordmark/);
   assert.match(css, /html\[data-hb-theme=light\] \.hb-product-wordmark/);
 });
+
+test('the private sidebar mounts the applications menu and links to the public website',()=>{
+ const platform=fs.readFileSync(path.join(root,'platform/platform.js'),'utf8');
+ assert.ok(platform.includes("link('Public website','https://'+domain+'/')"));
+ assert.match(platform,/sidebar\.querySelector\('\.os-brand'\)\?\.after\(section\)/);
+});
