@@ -35,3 +35,16 @@
 @keyframes hbBotPulse{0%,100%{opacity:.2}50%{opacity:1}}
 @media(max-width:560px){.hb-bot-launcher{right:14px;bottom:14px}.hb-bot-window{right:10px;bottom:82px;width:calc(100vw - 20px);height:min(72vh,620px)}}
 @media(prefers-reduced-motion:reduce){.hb-bot-window.open{animation:none}}
+.hb-bot-window{min-width:320px;min-height:400px;max-width:calc(100vw - 24px);max-height:calc(100vh - 108px);resize:none;touch-action:auto}
+.hb-bot-window.maximized{inset:12px!important;width:auto!important;height:auto!important;max-width:none;max-height:none}
+.hb-bot-window.minimized{height:48px!important;min-height:48px!important;resize:none}
+.hb-bot-window.minimized>:not(.hb-bot-head){display:none}
+.hb-bot-window.minimized .hb-bot-actions #hbBotMax{display:none}
+.hb-bot-head{cursor:grab;touch-action:none;user-select:none}
+.hb-bot-head:focus-visible{outline:2px solid #6ee7ff;outline-offset:-3px}
+.hb-bot-window.dragging .hb-bot-head{cursor:grabbing}
+.hb-bot-window.dragging,.hb-bot-window.resizing{transition:none;animation:none}
+.hb-bot-resize{position:absolute;right:2px;bottom:2px;width:24px;height:24px;border:0;background:transparent;color:#6e94a9;font-size:17px;cursor:nwse-resize;touch-action:none}
+.hb-bot-resize:hover{color:#6ee7ff}
+.hb-bot-window.minimized .hb-bot-resize{display:none}
+@media(max-width:559px){.hb-bot-window{left:10px!important;right:10px!important;bottom:82px!important;top:auto!important;width:auto!important;height:min(72vh,620px)!important;min-width:0;min-height:260px;max-height:calc(100vh - 100px)}.hb-bot-window.maximized{inset:8px!important;width:auto!important;height:auto!important}.hb-bot-head{cursor:default;touch-action:auto}.hb-bot-resize{display:none}}
