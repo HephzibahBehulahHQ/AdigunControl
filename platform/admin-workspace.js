@@ -48,20 +48,17 @@
   sidebar.querySelectorAll('.hb-platform-apps').forEach(group => group.remove());
   const footer = document.querySelector('.hb-platform-footer, footer.os-footer');
   if (footer) {
-    const external = sidebar.querySelector('[data-nav-group="external"] nav');
-    const blog = footer.querySelector('a[href*="blogspot.com"]');
-    if (external && blog) external.append(blog);
-    footer.className = 'hb-admin-footer';
-    const label = document.createElement('span');
-    label.textContent = (control ? 'Adigun Control' : 'Adigun Control · ' + workspace) + ' · Private workspace';
+    footer.classList.add('hb-admin-footer');
     const top = document.createElement('button');
     top.type = 'button';
-    top.textContent = 'Back to top';
+    top.textContent = '↑';
+    top.setAttribute('aria-label', 'Back to top');
+    top.title = 'Back to top';
     top.addEventListener('click', () => {
       document.querySelector('.os-main').scrollTop = 0;
       header.querySelector('a, button, input')?.focus({preventScroll: true});
     });
-    footer.replaceChildren(label, top);
+    if (!footer.querySelector('[aria-label="Back to top"]')) footer.append(top);
     document.querySelector('.os-main').append(footer);
   }
 

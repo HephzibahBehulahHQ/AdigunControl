@@ -63,6 +63,7 @@ function init(){const sheet=document.querySelector('link[href="/_hb/experience.c
  const observer=new MutationObserver(records=>{if(queued||!records.some(r=>r.addedNodes.length))return;queued=true;requestAnimationFrame(reconcile);});observer.observe(document.body,{childList:true,subtree:true});
  if(privatePage&&location.hash==='#users-signins')document.querySelector('[data-hb-monitor]')?.click();
  if(privatePage&&location.hash==='#security-releases')document.querySelector('[data-hb-security]')?.click();
+ if(privatePage)loadScript('/_hb/admin-session-indicator.js');
  if(!window.HBLanguage)loadScript('/_hb/language-system.js?v=20261024-1');
  if(!document.querySelector('#hbBotLauncher')){const css=el('link');css.rel='stylesheet';css.href='/css/hb-bot-chat.css';document.head.append(css);loadScript('/js/hb-bot-chat.js');}
 }

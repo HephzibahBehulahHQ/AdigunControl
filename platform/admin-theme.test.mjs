@@ -56,3 +56,14 @@ test('the private sidebar mounts the applications menu and links to the public w
  assert.ok(platform.includes("link('Public website','https://'+domain+'/')"));
  assert.match(platform,/sidebar\.querySelector\('\.os-brand'\)\?\.after\(section\)/);
 });
+
+test('Admin keeps the approved company footer and only adds an icon-only back-to-top control',()=>{
+ const workspace=fs.readFileSync(path.join(root,'platform/admin-workspace.js'),'utf8');
+ const platform=fs.readFileSync(path.join(root,'platform/platform.js'),'utf8');
+ assert.match(platform,/footer\.append\(identity,socials\)/);
+ assert.match(platform,/hb-platform-footer-identity/);
+ assert.match(workspace,/footer\.classList\.add\('hb-admin-footer'\)/);
+ assert.match(workspace,/footer\.append\(top\)/);
+ assert.doesNotMatch(workspace,/footer\.replaceChildren/);
+ assert.doesNotMatch(workspace,/Private workspace/);
+});
