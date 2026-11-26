@@ -14,7 +14,7 @@ copy('cyber-os', 'cyber-os');
 copy('apps/cyber-os', 'cyber-os');
 copySharedAssets(root, destination);
 
-for (const file of ['platform.js', 'admin-workspace.js', 'platform.css', 'experience.js', 'experience.css', 'admin-security-ui.js', 'admin-accounts-ui.js']) {
+for (const file of ['platform.js', 'admin-workspace.js', 'platform.css', 'experience.js', 'experience.css', 'admin-session-indicator.js', 'admin-security-ui.js', 'admin-accounts-ui.js']) {
   copy('platform/' + file, '_hb/' + file);
 }
 for (const file of ['hb-logo.svg', 'hephzibah-behulah-official.jpg']) copy('packages/shared-ui/assets/' + file, '_hb/' + file);

@@ -15,3 +15,9 @@ Public marketing pages and individual product deployments use their own reposito
 - The security report currently combines the Admin build identity, GitHub branch/release metadata, passive checks of published company routes, Supabase Auth audit events, and Admin action records. It does not ingest Cloudflare Access denials, MFA policy state, geo/device signals, IP reputation, or a vulnerability database; therefore it is not yet a complete SIEM feed.
 - The terminal Sandbox is explicitly offline and bounded. It does not provide arbitrary production shell access or internet-based reconnaissance. Keep those capabilities separate from the real, currently verified report sources.
 - Local `node --test platform/*.test.mjs` passed 75/75. A local rebuild was not run because `dist-admin/` already exists and `platform/build.mjs` refuses to overwrite it; the existing ignored build identifies older source commit `64edac807d16d36e66efc0a537fb6cb35f8d83e4`. The merged GitHub run is the current build evidence.
+
+## Local checkpoint — not deployed
+
+- The Admin toolbar now reads `/api/admin/security/session`, which verifies the current Cloudflare Access owner session. Its account dot is green only after a verified identity response; a failed check stays unverified.
+- The Admin workspace keeps the shared company footer, logo, attribution, and social links. The workspace adds only an icon-only back-to-top control.
+- `node --test platform/*.test.mjs` passes 77/77 after these changes. A clean production build and live browser check remain outstanding; do not attach the Admin hostname until the Cloudflare Access policy and required secrets are confirmed.
